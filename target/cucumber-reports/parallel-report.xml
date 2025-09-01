@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Cucumber" time="43.066" tests="2" skipped="0" failures="0" errors="0">
+<testcase classname="ATS Authentication" name="Login to ATS Dashboard - Example #1.1" time="22.693">
+<system-out><![CDATA[
+Given perform login with "https://teamso.com/dashboard/account/login" and "kadir.mogul@teamso.com" and "prodkadir" and "0" and "Akm@2026".passed
+Then verify login successful................................................passed
+And perform logout from system..............................................passed
+]]></system-out>
+</testcase>
+<testcase classname="ATS Authentication" name="Login to ATS Dashboard - Example #1.2" time="20.297">
+<system-out><![CDATA[
+Given perform login with "https://teamso.com/dashboard/account/login" and "kadir.mogul@teamso.com" and "prodkadir" and "1" and "Akm@2026".passed
+Then verify login successful................................................passed
+And perform logout from system..............................................passed
+]]></system-out>
+</testcase>
+</testsuite>
