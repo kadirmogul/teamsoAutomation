@@ -10,15 +10,23 @@ src/
 │   └── Main.java
 └── test/java/
     ├── features/
-    │   └── ExampleScenario.feature
-    ├── pages/
-    │   └── LoginPage.java
+    │   └── ATS/
+    │       ├── 01_ResponsibilityManagement/
+    │       ├── 02_ApprovalProcess/
+    │       ├── 03_RecruitmentRequest/
+    │       ├── 04_JobPostings/
+    │       ├── 05_CVPool/
+    │       ├── 06_Reports/
+    │       └── 07_Settings/
     ├── runner/
-    │   └── TestRunner.java
+    │   ├── TestRunner.java
+    │   └── ParallelTestRunner.java
     ├── stepDefinitions/
-    │   └── StepDefinations.java
+    │   └── AuthenticationStepDefinitions.java
     └── utilities/
-        └── MyDriver.java
+        ├── BaseTest.java
+        ├── MyDriver.java
+        └── TestUtils.java
 ```
 
 ## Gereksinimler
@@ -26,6 +34,7 @@ src/
 - Java 11+
 - Maven 3.6+
 - Chrome Browser
+- Selenium WebDriver
 
 ## Kurulum
 
@@ -42,3 +51,11 @@ mvn test
 ## Raporlar
 
 Test raporları `target/cucumber-report.html` dosyasında oluşturulur.
+
+## Özellikler
+
+- **ATS (Applicant Tracking System)** otomasyon testleri
+- **Cucumber BDD** framework
+- **Selenium WebDriver** ile web otomasyon
+- **Parallel test execution** desteği
+- **Detailed logging** ve raporlama
