@@ -25,11 +25,14 @@ public class AuthenticationStepDefinitions extends BaseTest {
     @Before
     public void setUp() {
         try {
-            // Her test öncesi driver'ı null yap ki performLogin'de yeni oluşturulsun
-            driver = null;
-            TestUtils.logInfo("Driver reset for new test");
+            // Sadece driver yoksa yeni oluştur, varsa kullan
+            if (driver == null) {
+                TestUtils.logInfo("Driver reset for new test");
+            } else {
+                TestUtils.logInfo("Using existing driver for test");
+            }
         } catch (Exception e) {
-            TestUtils.logError("Failed to reset driver", e);
+            TestUtils.logError("Failed to setup driver", e);
         }
     }
 
@@ -65,6 +68,61 @@ public class AuthenticationStepDefinitions extends BaseTest {
             softAssert.fail("Login verification failed: " + e.getMessage());
         }
         TestUtils.logSuccess("Login verification successful");
+    }
+    
+    // ========== MENU SELECTION STEPS ==========
+    
+    @And("select menu {string}")
+    public void select_menu(String menuName) {
+        try {
+            // BaseTest'teki selectMenu metodunu çağır
+            selectMenu(menuName, 15);
+            TestUtils.logSuccess("Menu '" + menuName + "' selection step completed successfully");
+        } catch (Exception e) {
+            TestUtils.logError("Menu selection step failed for: " + menuName, e);
+            softAssert.fail("Menu selection step failed for: " + menuName + " - " + e.getMessage());
+        }
+    }
+    
+    @And("select sub-menu index {string}")
+    public void select_sub_menu_index(String subMenuIndex) {
+        try {
+            // String'i int'e çevir
+            int index = Integer.parseInt(subMenuIndex);
+            
+            // BaseTest'teki selectModuleSubMenu metodunu çağır (menuName ile)
+            // Son seçilen menüyü kullan
+            String lastSelectedMenu = getLastSelectedMenu();
+            selectModuleSubMenu(lastSelectedMenu, index, 15);
+            TestUtils.logSuccess("Sub-menu index " + index + " selection step completed successfully");
+        } catch (Exception e) {
+            TestUtils.logError("Sub-menu selection step failed for index: " + subMenuIndex, e);
+            softAssert.fail("Sub-menu selection step failed for index: " + subMenuIndex + " - " + e.getMessage());
+        }
+    }
+    
+    @And("verify page opened successfully")
+    public void verify_page_opened_successfully() {
+        try {
+            // BaseTest'teki verifyPageOpened metodunu çağır
+            verifyPageOpened();
+            TestUtils.logSuccess("Page verification step completed successfully");
+        } catch (Exception e) {
+            TestUtils.logError("Page verification step failed", e);
+            softAssert.fail("Page verification step failed: " + e.getMessage());
+        }
+    }
+    
+    @And("verify settings page opened successfully")
+    public void verify_settings_page_opened_successfully() {
+        try {
+            // BaseTest'teki verifySettingsPageOpened metodunu çağır
+            verifySettingsPageOpened();
+            TestUtils.logSuccess("Settings page verification step completed successfully");
+        } catch (Exception e) {
+            TestUtils.logError("Settings page verification step failed", e);
+            softAssert.fail("Settings page verification step failed: " + e.getMessage());
+        }
     }
 
     // ========== TEARDOWN ==========

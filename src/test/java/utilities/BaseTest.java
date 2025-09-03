@@ -7,10 +7,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Random;
 
 public abstract class BaseTest {
     
@@ -42,85 +39,303 @@ public abstract class BaseTest {
         return driver;
     }
 
-    // ========== NAVIGATION & BROWSER CONTROL ==========
+    // ========== BROWSER CONTROL ==========
     
-    // Sayfa yenileme
-    protected void refreshPage() {
-        driver.navigate().refresh();
-        TestUtils.logInfo("Page refreshed");
-    }
-
-    // Geri gitme
-    protected void goBack() {
-        driver.navigate().back();
-        TestUtils.logInfo("Navigated back");
-    }
-
-    // İleri gitme
-    protected void goForward() {
-        driver.navigate().forward();
-        TestUtils.logInfo("Navigated forward");
-    }
-
     // Browser maximize
     protected void maximizeBrowser() {
         driver.manage().window().maximize();
         TestUtils.logInfo("Browser maximized");
     }
 
-    // Browser minimize
-    protected void minimizeBrowser() {
-        driver.manage().window().minimize();
-        TestUtils.logInfo("Browser minimized");
-    }
-
-    // Pencere boyutunu ayarla
-    protected void setWindowSize(int width, int height) {
-        driver.manage().window().setSize(new org.openqa.selenium.Dimension(width, height));
-        TestUtils.logInfo("Window size set to: " + width + "x" + height);
-    }
-
     // ========== ELEMENT INTERACTION HELPERS ==========
     
-    // Element'e tıklama (wait ile)
-    protected void clickElement(By locator, int timeoutSeconds) {
-        TestUtils.waitForElementClickable(driver, locator, timeoutSeconds);
-        driver.findElement(locator).click();
-        TestUtils.logSuccess("Element clicked: " + locator);
-    }
-
-    // Text yazma (clear + sendKeys)
+    // Text yazma (clear + sendKeys) - Eski metod, yeni setElementText kullan
     protected void typeText(By locator, String text, int timeoutSeconds) {
-        TestUtils.waitForElementVisible(driver, locator, timeoutSeconds);
-        WebElement element = driver.findElement(locator);
-        element.clear();
-        element.sendKeys(text);
-        TestUtils.logSuccess("Text entered: " + text);
+        setElementText(locator, text, timeoutSeconds);
     }
 
-    // Dropdown seçimi
-    protected void selectDropdownOption(By dropdownLocator, By optionLocator, int timeoutSeconds) {
-        TestUtils.waitForElementClickable(driver, dropdownLocator, timeoutSeconds);
-        driver.findElement(dropdownLocator).click();
-        TestUtils.waitForElementClickable(driver, optionLocator, timeoutSeconds);
-        driver.findElement(optionLocator).click();
-        TestUtils.logSuccess("Dropdown option selected");
+    // ========== ELEMENT FINDER HELPERS ==========
+    
+    // Element bul (tek element) - Normal timeout ile
+    protected WebElement findElement(By locator, int timeoutSeconds) {
+        try {
+            TestUtils.waitForElementVisible(driver, locator, timeoutSeconds);
+            WebElement element = driver.findElement(locator);
+            TestUtils.logSuccess("Element found: " + locator);
+            return element;
+        } catch (Exception e) {
+            TestUtils.logError("Element not found: " + locator, e);
+            throw new RuntimeException("Element not found: " + locator, e);
+        }
+    }
+    
+    // HIZLI Element bul (timeout olmadan) - Performans için
+    protected WebElement findElementFast(By locator) {
+        try {
+            WebElement element = driver.findElement(locator);
+            TestUtils.logSuccess("Element found fast: " + locator);
+            return element;
+        } catch (Exception e) {
+            TestUtils.logInfo("Element not found fast: " + locator);
+            return null;
+        }
+    }
+    
+    // HIZLI Element var mı kontrol et (timeout olmadan)
+    protected boolean isElementPresentFast(By locator) {
+        try {
+            return driver.findElement(locator).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    // HIZLI Element tıklanabilir mi kontrol et (timeout olmadan)
+    protected boolean isElementClickableFast(By locator) {
+        try {
+            WebElement element = driver.findElement(locator);
+            return element.isDisplayed() && element.isEnabled();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    // Element bul (çoklu element)
+    protected List<WebElement> findElements(By locator, int timeoutSeconds) {
+        try {
+            TestUtils.waitForElementVisible(driver, locator, timeoutSeconds);
+            List<WebElement> elements = driver.findElements(locator);
+            TestUtils.logSuccess("Found " + elements.size() + " elements: " + locator);
+            return elements;
+        } catch (Exception e) {
+            TestUtils.logError("Elements not found: " + locator, e);
+            throw new RuntimeException("Elements not found: " + locator, e);
+        }
+    }
+    
+    // Element var mı kontrol et
+    protected boolean isElementPresent(By locator, int timeoutSeconds) {
+        try {
+            TestUtils.waitForElementVisible(driver, locator, timeoutSeconds);
+            return driver.findElement(locator).isDisplayed();
+        } catch (Exception e) {
+            TestUtils.logInfo("Element not present: " + locator);
+            return false;
+        }
+    }
+    
+    // Element tıklanabilir mi kontrol et
+    protected boolean isElementClickable(By locator, int timeoutSeconds) {
+        try {
+            TestUtils.waitForElementClickable(driver, locator, timeoutSeconds);
+            return true;
+        } catch (Exception e) {
+            TestUtils.logInfo("Element not clickable: " + locator);
+            return false;
+        }
+    }
+    
+    // Element text'ini al
+    protected String getElementText(By locator, int timeoutSeconds) {
+        try {
+            WebElement element = findElement(locator, timeoutSeconds);
+            String text = element.getText();
+            TestUtils.logSuccess("Element text retrieved: " + text);
+            return text;
+        } catch (Exception e) {
+            TestUtils.logError("Failed to get element text", e);
+            return "";
+        }
+    }
+    
+    // Element attribute'unu al
+    protected String getElementAttribute(By locator, String attribute, int timeoutSeconds) {
+        try {
+            WebElement element = findElement(locator, timeoutSeconds);
+            String attrValue = element.getAttribute(attribute);
+            TestUtils.logSuccess("Element attribute retrieved: " + attribute + " = " + attrValue);
+            return attrValue;
+        } catch (Exception e) {
+            TestUtils.logError("Failed to get element attribute", e);
+            return "";
+        }
+    }
+    
+    // Element'e text yaz
+    protected void setElementText(By locator, String text, int timeoutSeconds) {
+        try {
+            WebElement element = findElement(locator, timeoutSeconds);
+            element.clear();
+            element.sendKeys(text);
+            TestUtils.logSuccess("Text entered: " + text);
+        } catch (Exception e) {
+            TestUtils.logError("Failed to set element text", e);
+            throw new RuntimeException("Failed to set element text", e);
+        }
+    }
+    
+    // Element'e tıkla
+    protected void clickElement(By locator, int timeoutSeconds) {
+        try {
+            WebElement element = findElement(locator, timeoutSeconds);
+            element.click();
+            TestUtils.logSuccess("Element clicked: " + locator);
+        } catch (Exception e) {
+            TestUtils.logError("Failed to click element", e);
+            throw new RuntimeException("Failed to click element", e);
+        }
+    }
+    
+    // JavaScript ile element'e tıkla
+    protected void clickElementWithJS(By locator, int timeoutSeconds) {
+        try {
+            WebElement element = findElement(locator, timeoutSeconds);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+            TestUtils.logSuccess("Element clicked with JS: " + locator);
+        } catch (Exception e) {
+            TestUtils.logError("Failed to click element with JS", e);
+            throw new RuntimeException("Failed to click element with JS", e);
+        }
+    }
+    
+    // ========== BATCH ELEMENT OPERATIONS ==========
+    
+    // Birden fazla element'e aynı anda tıkla
+    protected void clickMultipleElements(By locator, int timeoutSeconds) {
+        try {
+            List<WebElement> elements = findElements(locator, timeoutSeconds);
+            for (WebElement element : elements) {
+                element.click();
+            }
+            TestUtils.logSuccess("Clicked " + elements.size() + " elements: " + locator);
+        } catch (Exception e) {
+            TestUtils.logError("Failed to click multiple elements", e);
+            throw new RuntimeException("Failed to click multiple elements", e);
+        }
+    }
+    
+    // Birden fazla element'e aynı text yaz
+    protected void setTextToMultipleElements(By locator, String text, int timeoutSeconds) {
+        try {
+            List<WebElement> elements = findElements(locator, timeoutSeconds);
+            for (WebElement element : elements) {
+                element.clear();
+                element.sendKeys(text);
+            }
+            TestUtils.logSuccess("Text set to " + elements.size() + " elements: " + text);
+        } catch (Exception e) {
+            TestUtils.logError("Failed to set text to multiple elements", e);
+            throw new RuntimeException("Failed to set text to multiple elements", e);
+        }
+    }
+    
+    // Birden fazla element'in text'ini al
+    protected List<String> getTextFromMultipleElements(By locator, int timeoutSeconds) {
+        try {
+            List<WebElement> elements = findElements(locator, timeoutSeconds);
+            List<String> texts = new java.util.ArrayList<>();
+            for (WebElement element : elements) {
+                texts.add(element.getText());
+            }
+            TestUtils.logSuccess("Retrieved text from " + elements.size() + " elements");
+            return texts;
+        } catch (Exception e) {
+            TestUtils.logError("Failed to get text from multiple elements", e);
+            throw new RuntimeException("Failed to get text from multiple elements", e);
+        }
+    }
+    
+    // Birden fazla element'in görünürlüğünü kontrol et
+    protected boolean areAllElementsVisible(By locator, int timeoutSeconds) {
+        try {
+            List<WebElement> elements = findElements(locator, timeoutSeconds);
+            for (WebElement element : elements) {
+                if (!element.isDisplayed()) {
+                    return false;
+                }
+            }
+            TestUtils.logSuccess("All " + elements.size() + " elements are visible");
+            return true;
+        } catch (Exception e) {
+            TestUtils.logError("Failed to check visibility of multiple elements", e);
+            return false;
+        }
     }
 
-    // Hover over element
-    protected void hoverOverElement(By locator, int timeoutSeconds) {
-        TestUtils.waitForElementVisible(driver, locator, timeoutSeconds);
-        org.openqa.selenium.interactions.Actions actions = new org.openqa.selenium.interactions.Actions(driver);
-        actions.moveToElement(driver.findElement(locator)).perform();
-        TestUtils.logSuccess("Hovered over element: " + locator);
+    // ========== ELEMENT STATE HELPERS ==========
+    
+    // Element durumunu kontrol et (görünür, tıklanabilir, seçili)
+    protected java.util.Map<String, Boolean> getElementState(By locator, int timeoutSeconds) {
+        java.util.Map<String, Boolean> state = new java.util.HashMap<>();
+        try {
+            WebElement element = findElement(locator, timeoutSeconds);
+            state.put("displayed", element.isDisplayed());
+            state.put("enabled", element.isEnabled());
+            state.put("selected", element.isSelected());
+            state.put("clickable", isElementClickableFast(locator));
+            TestUtils.logSuccess("Element state retrieved: " + state);
+        } catch (Exception e) {
+            state.put("displayed", false);
+            state.put("enabled", false);
+            state.put("selected", false);
+            state.put("clickable", false);
+            TestUtils.logError("Failed to get element state", e);
+        }
+        return state;
     }
-
-    // Çift tıklama
-    protected void doubleClickElement(By locator, int timeoutSeconds) {
-        TestUtils.waitForElementClickable(driver, locator, timeoutSeconds);
-        org.openqa.selenium.interactions.Actions actions = new org.openqa.selenium.interactions.Actions(driver);
-        actions.doubleClick(driver.findElement(locator)).perform();
-        TestUtils.logSuccess("Double clicked element: " + locator);
+    
+    // Element'in belirli bir durumda olup olmadığını kontrol et
+    protected boolean isElementInState(By locator, String stateType, boolean expectedState, int timeoutSeconds) {
+        try {
+            java.util.Map<String, Boolean> state = getElementState(locator, timeoutSeconds);
+            boolean actualState = state.getOrDefault(stateType, false);
+            boolean result = actualState == expectedState;
+            TestUtils.logInfo("Element state check - " + stateType + ": " + actualState + " (expected: " + expectedState + ")");
+            return result;
+        } catch (Exception e) {
+            TestUtils.logError("Failed to check element state", e);
+            return false;
+        }
+    }
+    
+    // Element'in değerini kontrol et
+    protected boolean isElementValueEquals(By locator, String expectedValue, int timeoutSeconds) {
+        try {
+            WebElement element = findElement(locator, timeoutSeconds);
+            String actualValue = element.getAttribute("value");
+            boolean result = expectedValue.equals(actualValue);
+            TestUtils.logInfo("Element value check - actual: " + actualValue + " (expected: " + expectedValue + ")");
+            return result;
+        } catch (Exception e) {
+            TestUtils.logError("Failed to check element value", e);
+            return false;
+        }
+    }
+    
+    // Element'in text'ini kontrol et
+    protected boolean isElementTextEquals(By locator, String expectedText, int timeoutSeconds) {
+        try {
+            String actualText = getElementText(locator, timeoutSeconds);
+            boolean result = expectedText.equals(actualText);
+            TestUtils.logInfo("Element text check - actual: " + actualText + " (expected: " + expectedText + ")");
+            return result;
+        } catch (Exception e) {
+            TestUtils.logError("Failed to check element text", e);
+            return false;
+        }
+    }
+    
+    // Element'in text'ini içerip içermediğini kontrol et
+    protected boolean isElementTextContains(By locator, String expectedText, int timeoutSeconds) {
+        try {
+            String actualText = getElementText(locator, timeoutSeconds);
+            boolean result = actualText.contains(expectedText);
+            TestUtils.logInfo("Element text contains check - actual: " + actualText + " (contains: " + expectedText + ")");
+            return result;
+        } catch (Exception e) {
+            TestUtils.logError("Failed to check element text contains", e);
+            return false;
+        }
     }
 
     // ========== VERIFICATION HELPERS ==========
@@ -130,132 +345,7 @@ public abstract class BaseTest {
         return driver.getCurrentUrl().contains(expectedText);
     }
 
-    // Sayfa başlığı kontrolü
-    protected boolean isPageTitleContains(String expectedText) {
-        return driver.getTitle().contains(expectedText);
-    }
-
-    // Element görünürlük kontrolü
-    protected boolean isElementDisplayed(By locator) {
-        try {
-            return driver.findElement(locator).isDisplayed();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    // Element aktif mi kontrolü
-    protected boolean isElementEnabled(By locator) {
-        try {
-            return driver.findElement(locator).isEnabled();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    // Element text'ini al
-    protected String getElementText(By locator) {
-        try {
-            return driver.findElement(locator).getText();
-        } catch (Exception e) {
-            TestUtils.logError("Failed to get element text", e);
-            return "";
-        }
-    }
-
-    // Element attribute'unu al
-    protected String getElementAttribute(By locator, String attribute) {
-        try {
-            return driver.findElement(locator).getAttribute(attribute);
-        } catch (Exception e) {
-            TestUtils.logError("Failed to get element attribute", e);
-            return "";
-        }
-    }
-
-    // ========== SCROLL & ELEMENT FINDING HELPERS ==========
-    
-    // Element bulana kadar scroll yap (YUKARI-AŞAĞI)
-    protected WebElement scrollToFindElement(By locator, int maxScrolls) {
-        TestUtils.logInfo("Searching for element with scroll: " + locator);
-        
-        for (int i = 0; i < maxScrolls; i++) {
-            try {
-                WebElement element = driver.findElement(locator);
-                if (element.isDisplayed()) {
-                    TestUtils.logSuccess("Element found after " + (i + 1) + " scrolls");
-                    return element;
-                }
-            } catch (Exception e) {
-                // Element bulunamadı, scroll yap
-            }
-            
-            scrollDown();
-            TestUtils.waitForSeconds(1);
-        }
-        
-        // Yukarı doğru da scroll yap
-        for (int i = 0; i < maxScrolls; i++) {
-            try {
-                WebElement element = driver.findElement(locator);
-                if (element.isDisplayed()) {
-                    TestUtils.logSuccess("Element found after scrolling up " + (i + 1) + " times");
-                    return element;
-                }
-            } catch (Exception e) {
-                // Element bulunamadı, scroll yap
-            }
-            
-            scrollUp();
-            TestUtils.waitForSeconds(1);
-        }
-        
-        throw new RuntimeException("Element not found after scrolling: " + locator);
-    }
-
-    // Element bulana kadar scroll yap (SADECE AŞAĞI)
-    protected WebElement scrollDownToFindElement(By locator, int maxScrolls) {
-        TestUtils.logInfo("Searching for element by scrolling down: " + locator);
-        
-        for (int i = 0; i < maxScrolls; i++) {
-            try {
-                WebElement element = driver.findElement(locator);
-                if (element.isDisplayed()) {
-                    TestUtils.logSuccess("Element found after " + (i + 1) + " scrolls down");
-                    return element;
-                }
-            } catch (Exception e) {
-                // Element bulunamadı, scroll yap
-            }
-            
-            scrollDown();
-            TestUtils.waitForSeconds(1);
-        }
-        
-        throw new RuntimeException("Element not found after scrolling down: " + locator);
-    }
-
-    // Element bulana kadar scroll yap (SADECE YUKARI)
-    protected WebElement scrollUpToFindElement(By locator, int maxScrolls) {
-        TestUtils.logInfo("Searching for element by scrolling up: " + locator);
-        
-        for (int i = 0; i < maxScrolls; i++) {
-            try {
-                WebElement element = driver.findElement(locator);
-                if (element.isDisplayed()) {
-                    TestUtils.logSuccess("Element found after " + (i + 1) + " scrolls up");
-                    return element;
-                }
-            } catch (Exception e) {
-                // Element bulunamadı, scroll yap
-            }
-            
-            scrollUp();
-            TestUtils.waitForSeconds(1);
-        }
-        
-        throw new RuntimeException("Element not found after scrolling up: " + locator);
-    }
+    // ========== SCROLL HELPERS ==========
 
     // Aşağı scroll
     protected void scrollDown() {
@@ -297,22 +387,38 @@ public abstract class BaseTest {
         TestUtils.logInfo("Scrolled to bottom");
     }
 
-    // ========== WAIT & TIMING HELPERS ==========
+    // ========== SMART WAIT HELPERS ==========
     
-    // Element kaybolana kadar bekle
-    protected void waitForElementToDisappear(By locator, int timeoutSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
-        TestUtils.logSuccess("Element disappeared: " + locator);
+    // Element görünene kadar akıllı bekle (max 5 saniye)
+    protected WebElement waitForElementSmart(By locator) {
+        return waitForElementSmart(locator, 5);
     }
-
-    // Belirli text görünene kadar bekle
-    protected void waitForTextToBePresent(By locator, String text, int timeoutSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
-        wait.until(ExpectedConditions.textToBePresentInElementLocated(locator, text));
-        TestUtils.logSuccess("Text appeared: " + text);
+    
+    // Element görünene kadar akıllı bekle (custom timeout)
+    protected WebElement waitForElementSmart(By locator, int maxWaitSeconds) {
+        for (int i = 0; i < maxWaitSeconds; i++) {
+            WebElement element = findElementFast(locator);
+            if (element != null && element.isDisplayed()) {
+                TestUtils.logSuccess("Element found smartly after " + i + " seconds: " + locator);
+                return element;
+            }
+            TestUtils.waitForSeconds(1);
+        }
+        throw new RuntimeException("Element not found after smart wait: " + locator);
     }
-
+    
+    // Element kaybolana kadar akıllı bekle
+    protected void waitForElementToDisappearSmart(By locator, int maxWaitSeconds) {
+        for (int i = 0; i < maxWaitSeconds; i++) {
+            if (!isElementPresentFast(locator)) {
+                TestUtils.logSuccess("Element disappeared smartly after " + i + " seconds: " + locator);
+                return;
+            }
+            TestUtils.waitForSeconds(1);
+        }
+        throw new RuntimeException("Element still present after smart wait: " + locator);
+    }
+    
     // URL değişene kadar bekle
     protected void waitForUrlToChange(String oldUrl, int timeoutSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
@@ -320,14 +426,163 @@ public abstract class BaseTest {
         TestUtils.logSuccess("URL changed from: " + oldUrl);
     }
 
-    // Başlık değişene kadar bekle
-    protected void waitForPageTitleToChange(String oldTitle, int timeoutSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
-        wait.until(ExpectedConditions.not(ExpectedConditions.titleIs(oldTitle)));
-        TestUtils.logSuccess("Page title changed from: " + oldTitle);
+    // ========== FAST FORM FILLING HELPERS ==========
+    
+    // Hızlı form doldurma - Map ile
+    protected void fillFormFast(java.util.Map<String, String> formData, int timeoutSeconds) {
+        try {
+            for (java.util.Map.Entry<String, String> entry : formData.entrySet()) {
+                String fieldName = entry.getKey();
+                String fieldValue = entry.getValue();
+                
+                // Farklı selector türlerini dene
+                By locator = null;
+                if (fieldName.startsWith("id:")) {
+                    locator = By.id(fieldName.substring(3));
+                } else if (fieldName.startsWith("name:")) {
+                    locator = By.name(fieldName.substring(5));
+                } else if (fieldName.startsWith("css:")) {
+                    locator = By.cssSelector(fieldName.substring(4));
+                } else {
+                    // Default olarak name attribute kullan
+                    locator = By.name(fieldName);
+                }
+                
+                setElementText(locator, fieldValue, timeoutSeconds);
+            }
+            TestUtils.logSuccess("Form filled fast with " + formData.size() + " fields");
+        } catch (Exception e) {
+            TestUtils.logError("Failed to fill form fast", e);
+            throw new RuntimeException("Failed to fill form fast", e);
+        }
+    }
+    
+    // Hızlı form doldurma - Array ile
+    protected void fillFormFast(String[][] formData, int timeoutSeconds) {
+        try {
+            for (String[] field : formData) {
+                if (field.length >= 2) {
+                    String fieldName = field[0];
+                    String fieldValue = field[1];
+                    setElementText(By.name(fieldName), fieldValue, timeoutSeconds);
+                }
+            }
+            TestUtils.logSuccess("Form filled fast with " + formData.length + " fields");
+        } catch (Exception e) {
+            TestUtils.logError("Failed to fill form fast", e);
+            throw new RuntimeException("Failed to fill form fast", e);
+        }
+    }
+    
+    // Hızlı dropdown seçimi
+    protected void selectDropdownOptionFast(By dropdownLocator, String optionText, int timeoutSeconds) {
+        try {
+            WebElement dropdown = findElement(dropdownLocator, timeoutSeconds);
+            dropdown.click();
+            
+            // Option'ı bul ve seç
+            By optionLocator = By.xpath("//option[contains(text(),'" + optionText + "')]");
+            WebElement option = waitForElementSmart(optionLocator, 3);
+            option.click();
+            
+            TestUtils.logSuccess("Dropdown option selected fast: " + optionText);
+        } catch (Exception e) {
+            TestUtils.logError("Failed to select dropdown option fast", e);
+            throw new RuntimeException("Failed to select dropdown option fast", e);
+        }
+    }
+    
+    // Hızlı checkbox işaretleme
+    protected void checkCheckboxFast(By checkboxLocator, boolean shouldCheck, int timeoutSeconds) {
+        try {
+            WebElement checkbox = findElement(checkboxLocator, timeoutSeconds);
+            boolean isChecked = checkbox.isSelected();
+            
+            if (shouldCheck && !isChecked) {
+                checkbox.click();
+            } else if (!shouldCheck && isChecked) {
+                checkbox.click();
+            }
+            
+            TestUtils.logSuccess("Checkbox " + (shouldCheck ? "checked" : "unchecked") + " fast");
+        } catch (Exception e) {
+            TestUtils.logError("Failed to check/uncheck checkbox fast", e);
+            throw new RuntimeException("Failed to check/uncheck checkbox fast", e);
+        }
     }
 
-    // ========== DATA & UTILITY HELPERS ==========
+    // ========== TEST DATA HELPERS ==========
+    
+    // Rastgele test verisi oluştur
+    protected String generateRandomTestData(String dataType) {
+        switch (dataType.toLowerCase()) {
+            case "email":
+                return "test_" + System.currentTimeMillis() + "@example.com";
+            case "phone":
+                return "555" + String.format("%07d", (int)(Math.random() * 10000000));
+            case "name":
+                return "TestUser_" + System.currentTimeMillis();
+            case "password":
+                return "TestPass" + (int)(Math.random() * 1000);
+            case "number":
+                return String.valueOf((int)(Math.random() * 1000));
+            default:
+                return "TestData_" + System.currentTimeMillis();
+        }
+    }
+    
+    // Test verisi Map'i oluştur
+    protected java.util.Map<String, String> createTestDataMap(String... dataPairs) {
+        java.util.Map<String, String> testData = new java.util.HashMap<>();
+        for (int i = 0; i < dataPairs.length; i += 2) {
+            if (i + 1 < dataPairs.length) {
+                testData.put(dataPairs[i], dataPairs[i + 1]);
+            }
+        }
+        TestUtils.logSuccess("Test data map created with " + testData.size() + " entries");
+        return testData;
+    }
+    
+    // Test verisi Array'i oluştur
+    protected String[][] createTestDataArray(String... dataPairs) {
+        String[][] testData = new String[dataPairs.length / 2][2];
+        for (int i = 0; i < dataPairs.length; i += 2) {
+            if (i + 1 < dataPairs.length) {
+                testData[i / 2][0] = dataPairs[i];
+                testData[i / 2][1] = dataPairs[i + 1];
+            }
+        }
+        TestUtils.logSuccess("Test data array created with " + testData.length + " entries");
+        return testData;
+    }
+    
+    // Test verisi dosyasından oku (basit format)
+    protected java.util.Map<String, String> loadTestDataFromString(String dataString) {
+        java.util.Map<String, String> testData = new java.util.HashMap<>();
+        String[] lines = dataString.split("\n");
+        for (String line : lines) {
+            String[] parts = line.split("=");
+            if (parts.length == 2) {
+                testData.put(parts[0].trim(), parts[1].trim());
+            }
+        }
+        TestUtils.logSuccess("Test data loaded from string with " + testData.size() + " entries");
+        return testData;
+    }
+    
+    // Test verisi doğrulama
+    protected boolean validateTestData(java.util.Map<String, String> testData, String... requiredFields) {
+        for (String field : requiredFields) {
+            if (!testData.containsKey(field) || testData.get(field).isEmpty()) {
+                TestUtils.logError("Required field missing or empty: " + field, new Exception("Validation failed"));
+                return false;
+            }
+        }
+        TestUtils.logSuccess("Test data validation passed for " + requiredFields.length + " fields");
+        return true;
+    }
+
+    // ========== UTILITY HELPERS ==========
     
     // Ekran görüntüsü al
     protected void takeScreenshot(String filename) {
@@ -339,34 +594,70 @@ public abstract class BaseTest {
         }
     }
 
-    // Şu anki zaman damgasını al
-    protected String getCurrentTimestamp() {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
-        return now.format(formatter);
-    }
-
-    // Rastgele string oluştur
-    protected String generateRandomString(int length) {
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            sb.append(chars.charAt(random.nextInt(chars.length())));
+    // ========== SCROLL & VISIBILITY OPTIMIZATION ==========
+    
+    // Element'i görünür hale getir ve tıkla
+    protected void scrollToElementAndClick(By locator, int timeoutSeconds) {
+        try {
+            WebElement element = findElement(locator, timeoutSeconds);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element);
+            TestUtils.waitForSeconds(1); // Smooth scroll için bekle
+            element.click();
+            TestUtils.logSuccess("Element scrolled to and clicked: " + locator);
+        } catch (Exception e) {
+            TestUtils.logError("Failed to scroll to element and click", e);
+            throw new RuntimeException("Failed to scroll to element and click", e);
         }
-        return sb.toString();
     }
-
-    // Rastgele email oluştur
-    protected String generateRandomEmail() {
-        return "test_" + generateRandomString(8) + "@example.com";
+    
+    // Element'i görünür hale getir ve text yaz
+    protected void scrollToElementAndType(By locator, String text, int timeoutSeconds) {
+        try {
+            WebElement element = findElement(locator, timeoutSeconds);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element);
+            TestUtils.waitForSeconds(1); // Smooth scroll için bekle
+            element.clear();
+            element.sendKeys(text);
+            TestUtils.logSuccess("Element scrolled to and text entered: " + locator);
+        } catch (Exception e) {
+            TestUtils.logError("Failed to scroll to element and type", e);
+            throw new RuntimeException("Failed to scroll to element and type", e);
+        }
     }
-
-    // Tarihi formatla
-    protected String formatDate(String pattern) {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-        return now.format(formatter);
+    
+    // Element görünür mü kontrol et (scroll gerekirse yap)
+    protected boolean isElementVisibleWithScroll(By locator, int timeoutSeconds) {
+        try {
+            WebElement element = findElement(locator, timeoutSeconds);
+            if (element.isDisplayed()) {
+                return true;
+            }
+            
+            // Element görünür değilse scroll yap
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element);
+            TestUtils.waitForSeconds(1);
+            
+            return element.isDisplayed();
+        } catch (Exception e) {
+            TestUtils.logError("Failed to check element visibility with scroll", e);
+            return false;
+        }
+    }
+    
+    // Element'i viewport'un merkezine getir
+    protected void centerElementInViewport(By locator, int timeoutSeconds) {
+        try {
+            WebElement element = findElement(locator, timeoutSeconds);
+            ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center', inline: 'center'});", 
+                element
+            );
+            TestUtils.waitForSeconds(1);
+            TestUtils.logSuccess("Element centered in viewport: " + locator);
+        } catch (Exception e) {
+            TestUtils.logError("Failed to center element in viewport", e);
+            throw new RuntimeException("Failed to center element in viewport", e);
+        }
     }
 
     // ========== CLEANUP HELPERS ==========
@@ -377,53 +668,8 @@ public abstract class BaseTest {
         TestUtils.logInfo("All cookies cleared");
     }
 
-    // Local storage'ı temizle
-    protected void clearLocalStorage() {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("window.localStorage.clear();");
-        TestUtils.logInfo("Local storage cleared");
-    }
-
-    // Session storage'ı temizle
-    protected void clearSessionStorage() {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("window.sessionStorage.clear();");
-        TestUtils.logInfo("Session storage cleared");
-    }
-
-    // Alert'i kabul et
-    protected void acceptAlert() {
-        try {
-            driver.switchTo().alert().accept();
-            TestUtils.logSuccess("Alert accepted");
-        } catch (Exception e) {
-            TestUtils.logError("Failed to accept alert", e);
-        }
-    }
-
-    // Alert'i reddet
-    protected void dismissAlert() {
-        try {
-            driver.switchTo().alert().dismiss();
-            TestUtils.logSuccess("Alert dismissed");
-        } catch (Exception e) {
-            TestUtils.logError("Failed to dismiss alert", e);
-        }
-    }
-
-    // ========== COMMON WORKFLOW HELPERS ==========
+    // ========== WORKFLOW HELPERS ==========
     
-    // Frame'e geç
-    protected void switchToFrame(By frameLocator) {
-        try {
-            WebElement frame = driver.findElement(frameLocator);
-            driver.switchTo().frame(frame);
-            TestUtils.logSuccess("Switched to frame: " + frameLocator);
-        } catch (Exception e) {
-            TestUtils.logError("Failed to switch to frame", e);
-        }
-    }
-
     // Ana frame'e geri dön
     protected void switchToDefaultContent() {
         driver.switchTo().defaultContent();
@@ -448,28 +694,20 @@ public abstract class BaseTest {
             TestUtils.logInfo("Page load check completed");
             
                                     // 4. DİNAMİK email gir
-                        TestUtils.waitForElementVisible(driver, By.id("emailInputOnLoginPage"), 15);
-                        driver.findElement(By.id("emailInputOnLoginPage")).clear(); // Önce temizle
-                        driver.findElement(By.id("emailInputOnLoginPage")).sendKeys(email);
-                        TestUtils.logSuccess("Email entered successfully: " + email);
+                        setElementText(By.id("emailInputOnLoginPage"), email, 15);
             
             // 5. Login butonuna bas
-            TestUtils.waitForElementClickable(driver, By.id("login-button"), 15);
-            driver.findElement(By.id("login-button")).click();
-            TestUtils.logSuccess("Login button clicked successfully");
+            clickElement(By.id("login-button"), 15);
             
             // 6. SAYFA TAM YÜKLENENE KADAR BEKLE (Login sonrası - KONTROL İLE)
             TestUtils.waitForPageToLoad(driver, 20);
             TestUtils.logInfo("Page load check after login completed");
             
                                     // 7. DİNAMİK account search
-                        TestUtils.waitForElementVisible(driver, By.cssSelector("input[placeholder='Hesap ara...']"), 15);
-                        driver.findElement(By.cssSelector("input[placeholder='Hesap ara...']")).clear(); // Önce temizle
-                        driver.findElement(By.cssSelector("input[placeholder='Hesap ara...']")).sendKeys(searchText);
-                        TestUtils.logSuccess("Account search completed: " + searchText);
+                        setElementText(By.cssSelector("input[placeholder='Hesap ara...']"), searchText, 15);
             
                                     // 8. DİNAMİK account index seç
-                        List<WebElement> accountButtons = driver.findElements(By.cssSelector("button[id='accountSelectButtonOnLoginPage']"));
+                        List<WebElement> accountButtons = findElements(By.cssSelector("button[id='accountSelectButtonOnLoginPage']"), 15);
                         int index = Integer.parseInt(accountIndex);
                         if (index < accountButtons.size()) {
                             accountButtons.get(index).click();
@@ -483,15 +721,10 @@ public abstract class BaseTest {
             TestUtils.logInfo("Page load check after account selection completed");
             
                                     // 10. DİNAMİK password gir
-                        TestUtils.waitForElementVisible(driver, By.id("passwordInputOnLoginPage"), 15);
-                        driver.findElement(By.id("passwordInputOnLoginPage")).clear(); // Önce temizle
-                        driver.findElement(By.id("passwordInputOnLoginPage")).sendKeys(password);
-                        TestUtils.logSuccess("Password entered successfully");
+                        setElementText(By.id("passwordInputOnLoginPage"), password, 15);
             
             // 11. Final login
-            TestUtils.waitForElementClickable(driver, By.id("loginButtonInPasswordCheckInLoginPage"), 15);
-            driver.findElement(By.id("loginButtonInPasswordCheckInLoginPage")).click();
-            TestUtils.logSuccess("Final login button clicked successfully");
+            clickElement(By.id("loginButtonInPasswordCheckInLoginPage"), 15);
             
             // 12. SAYFA TAM YÜKLENENE KADAR BEKLE (Final login sonrası - KONTROL İLE)
             TestUtils.waitForPageToLoad(driver, 20);
@@ -523,17 +756,15 @@ public abstract class BaseTest {
             driver = getActiveDriver();
 
             // 1. Dropdown toggle butonunu bul ve tıkla
-            TestUtils.waitForElementClickable(driver, By.id("__BVID__31__BV_toggle_"), 15);
-            driver.findElement(By.id("__BVID__31__BV_toggle_")).click();
-            TestUtils.logSuccess("Dropdown toggle button clicked successfully");
+            clickElement(By.id("__BVID__31__BV_toggle_"), 15);
             
             // 2. Dropdown menüden logout linkini bul ve tıkla (index 3)
-            List<WebElement> dropdownItems = driver.findElements(By.cssSelector("a.dropdown-item"));
+            List<WebElement> dropdownItems = findElements(By.cssSelector("a.dropdown-item"), 15);
             dropdownItems.get(3).click();
             TestUtils.logSuccess("Logout link clicked successfully at index 3");
             
             // 3. "Hoş Geldin" yazısının görünür olduğunu kontrol et (aynı locator)
-            TestUtils.waitForElementVisible(driver, By.xpath("//h1[contains(text(),'Hoş Geldin')]"), 15);
+            findElement(By.xpath("//h1[contains(text(),'Hoş Geldin')]"), 15);
             TestUtils.logSuccess("Logout process completed successfully");
             
         } catch (Exception e) {
@@ -552,5 +783,412 @@ public abstract class BaseTest {
         this.driver = driver;
     }
     
+    // ========== MENU SELECTION HELPERS ==========
+    
+    // Parametrik menü seçimi - sadece modül ismine bakarak
+    protected void selectMenu(String menuName, int timeoutSeconds) {
+        try {
+            TestUtils.logInfo("Selecting menu: " + menuName);
+            
+            // Driver'ı aktif hale getir
+            driver = getActiveDriver();
+            
+            // Sidebar menü container'ını bul
+            findElement(By.id("sidebar-menu"), timeoutSeconds);
+            
+            // Sidebar menü içindeki ul elementini bul
+            findElement(By.cssSelector("div#sidebar-menu ul"), timeoutSeconds);
+            
+            // Ul içindeki li elementlerini bul
+            List<WebElement> menuElements = findElements(By.xpath("//div[@id='sidebar-menu']//ul//li"), timeoutSeconds);
+            
+            TestUtils.logInfo("Found " + menuElements.size() + " menu items in sidebar");
+            
+            // İlk 10 menüyü listele (debug için)
+            TestUtils.logInfo("First 10 menu items:");
+            for (int i = 0; i < Math.min(10, menuElements.size()); i++) {
+                String menuText = menuElements.get(i).getText().trim();
+                TestUtils.logInfo("Menu " + i + ": '" + menuText + "'");
+            }
+            
+            // Belirtilen menüyü bul - sadece modül ismine bakarak
+            WebElement targetMenu = null;
+            int scrollAttempts = 0;
+            int maxScrollAttempts = 10;
+            
+            while (targetMenu == null && scrollAttempts < maxScrollAttempts) {
+                // Tüm menü elementlerini tekrar al (scroll sonrası)
+                menuElements = driver.findElements(By.xpath("//div[@id='sidebar-menu']//ul//li"));
+                
+                for (WebElement menuElement : menuElements) {
+                    String menuText = menuElement.getText().trim();
+                    if (menuText.contains(menuName)) {
+                        targetMenu = menuElement;
+                        TestUtils.logInfo("Found menu (contains): " + menuName + " in text: '" + menuText + "'");
+                        break;
+                    }
+                }
+                
+                if (targetMenu == null) {
+                    TestUtils.logInfo("Menu '" + menuName + "' not found, scrolling menu bar... (attempt " + (scrollAttempts + 1) + ")");
+                    scrollMenuToBottom();
+                    TestUtils.waitForSeconds(1);
+                    scrollAttempts++;
+                }
+            }
+            
+            if (targetMenu == null) {
+                // Mevcut menüleri listele
+                StringBuilder availableMenus = new StringBuilder();
+                for (int i = 0; i < menuElements.size(); i++) {
+                    availableMenus.append(i).append(": ").append(menuElements.get(i).getText().trim());
+                    if (i < menuElements.size() - 1) availableMenus.append(", ");
+                }
+                TestUtils.logError("Menu '" + menuName + "' not found after " + maxScrollAttempts + " scroll attempts. Available menus: " + availableMenus.toString(), new Exception("Menu not found"));
+                throw new RuntimeException("Menu '" + menuName + "' not found after " + maxScrollAttempts + " scroll attempts. Available menus: " + availableMenus.toString());
+            }
+            
+            
+            // Menüye tıkla
+            targetMenu.click();
+            TestUtils.logSuccess("Menu '" + menuName + "' selected successfully");
+            
+            // Son seçilen menüyü kaydet
+            lastSelectedMenu = menuName;
+            
+            // Sayfa yüklenene kadar bekle
+            TestUtils.waitForPageToLoad(driver, 15);
+            TestUtils.logInfo("Page load completed after menu selection");
+            
+        } catch (Exception e) {
+            TestUtils.logError("Menu selection failed for: " + menuName, e);
+            throw new RuntimeException("Menu selection failed for: " + menuName, e);
+        }
+    }
+    
+    // Menü barını sonuna kadar scroll yap
+    protected void scrollMenuToBottom() {
+        try {
+            TestUtils.logInfo("Scrolling menu bar to bottom...");
+            
+            // Menü container'ını bul
+            WebElement menuContainer = driver.findElement(By.id("sidebar-menu"));
+            
+            // Menü yüksekliğini al
+            long lastScrollTop = (Long) ((JavascriptExecutor) driver).executeScript("return arguments[0].scrollTop;", menuContainer);
+            
+            while (true) {
+                // Menü içinde scroll yap
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollTop = arguments[0].scrollHeight;", menuContainer);
+                
+                // Scroll sonrası bekle
+                TestUtils.waitForSeconds(1);
+                
+                // Yeni scroll pozisyonunu al
+                long newScrollTop = (Long) ((JavascriptExecutor) driver).executeScript("return arguments[0].scrollTop;", menuContainer);
+                
+                // Eğer scroll pozisyonu değişmediyse menü sonuna ulaştık
+                if (newScrollTop == lastScrollTop) {
+                    TestUtils.logSuccess("Reached menu bottom successfully");
+                    break;
+                }
+                
+                lastScrollTop = newScrollTop;
+                TestUtils.logInfo("Scrolled menu down, new position: " + newScrollTop);
+            }
+            
+        } catch (Exception e) {
+            TestUtils.logError("Failed to scroll menu to bottom", e);
+            throw new RuntimeException("Failed to scroll menu to bottom", e);
+        }
+    }
+    
+    // Genel sayfa açıldı mı kontrol et
+    protected void verifyPageOpened() {
+        try {
+            TestUtils.logInfo("Verifying page opened...");
+            driver = getActiveDriver();
+            String currentUrl = driver.getCurrentUrl();
+            TestUtils.logInfo("Current URL after click: " + currentUrl);
+            
+            // Dashboard'dan farklı bir sayfaya yönlendirildi mi kontrol et
+            boolean isDifferentPage = !currentUrl.equals("https://teamso.com/dashboard") && 
+                                    !currentUrl.contains("/dashboard/account/login");
+            
+            if (isDifferentPage) {
+                TestUtils.logSuccess("Page opened successfully - URL: " + currentUrl);
+            } else {
+                TestUtils.logError("Page not opened - Current URL: " + currentUrl, new Exception("Page verification failed"));
+                throw new RuntimeException("Page not opened - Expected different page but got: " + currentUrl);
+            }
+            
+            String pageTitle = driver.getTitle();
+            TestUtils.logInfo("Page title: " + pageTitle);
+            
+        } catch (Exception e) {
+            TestUtils.logError("Page verification failed", e);
+            throw new RuntimeException("Page verification failed", e);
+        }
+    }
+    
+    // Ayarlar sayfasının açıldığını doğrula
+    protected void verifySettingsPageOpened() {
+        try {
+            TestUtils.logInfo("Verifying settings page opened...");
+            
+            // Driver'ı aktif hale getir
+            driver = getActiveDriver();
+            
+            // Ayarlar sayfasının açıldığını doğrula
+            String currentUrl = driver.getCurrentUrl();
+            TestUtils.logInfo("Current URL after settings click: " + currentUrl);
+            
+            // URL'de "settings" veya "ayarlar" kelimesi var mı kontrol et
+            boolean isSettingsPage = currentUrl.toLowerCase().contains("settings") || 
+                                   currentUrl.toLowerCase().contains("ayarlar") ||
+                                   currentUrl.toLowerCase().contains("config");
+            
+            if (isSettingsPage) {
+                TestUtils.logSuccess("Settings page opened successfully - URL: " + currentUrl);
+            } else {
+                TestUtils.logError("Settings page not opened - Current URL: " + currentUrl, new Exception("Settings page verification failed"));
+                throw new RuntimeException("Settings page not opened - Expected settings page but got: " + currentUrl);
+            }
+            
+            // Sayfa başlığını da kontrol et
+            String pageTitle = driver.getTitle();
+            TestUtils.logInfo("Page title: " + pageTitle);
+            
+        } catch (Exception e) {
+            TestUtils.logError("Settings page verification failed", e);
+            throw new RuntimeException("Settings page verification failed", e);
+        }
+    }
+    
+    // Son seçilen menüyü döndür
+    private String lastSelectedMenu = null;
+    
+    protected String getLastSelectedMenu() {
+        return lastSelectedMenu;
+    }
+    
+    // Parametrik alt menü seçimi (modül adı olmadan - son seçilen menüyü kullan)
+    protected void selectSubMenu(int subMenuIndex, int timeoutSeconds) {
+        try {
+            TestUtils.logInfo("Selecting sub-menu index: " + subMenuIndex);
+            driver = getActiveDriver();
+            
+            // Son seçilen menüyü kullan (zaten selectMenu ile seçilmiş olmalı)
+            TestUtils.logInfo("Using last selected menu for sub-menu selection");
+            TestUtils.waitForSeconds(2); // Modül açılması için kısa bekleme
+            scrollMenuToBottom(); // Call the menu-specific scroll
+            TestUtils.waitForSeconds(2); // Wait after scroll
+
+            // Tüm alt menüleri bul
+            By subMenuItems = By.cssSelector("ul li ul li");
+            List<WebElement> allSubMenuElements = driver.findElements(subMenuItems);
+
+            // Sadece açık olan modüle ait olanları filtrele
+            List<WebElement> subMenuElements = new java.util.ArrayList<>();
+            for (WebElement subMenu : allSubMenuElements) {
+                try {
+                    // Alt menünün parent'ını bul
+                    WebElement parentUl = subMenu.findElement(By.xpath("./.."));
+                    WebElement parentLi = parentUl.findElement(By.xpath("./.."));
+                    
+                    // Eğer parent açık ise (aria-expanded="true" veya class'ında "open" varsa)
+                    String parentClass = parentLi.getAttribute("class");
+                    String ariaExpanded = parentLi.getAttribute("aria-expanded");
+                    
+                    if (parentClass != null && (parentClass.contains("open") || parentClass.contains("active")) ||
+                        "true".equals(ariaExpanded)) {
+                        subMenuElements.add(subMenu);
+                    }
+                } catch (Exception e) {
+                    // Bu alt menü açık modüle ait değil, atla
+                }
+            }
+
+            TestUtils.logInfo("After scroll, found " + subMenuElements.size() + " sub-menu items for open module");
+            TestUtils.logInfo("Available sub-menus after scroll:");
+            for (int i = 0; i < subMenuElements.size(); i++) {
+                String subMenuText = subMenuElements.get(i).getText().trim();
+                TestUtils.logInfo("Index " + i + ": " + subMenuText);
+            }
+            
+            if (subMenuIndex < 0 || subMenuIndex >= subMenuElements.size()) {
+                StringBuilder availableSubMenus = new StringBuilder();
+                for (int i = 0; i < subMenuElements.size(); i++) {
+                    availableSubMenus.append(i).append(": ").append(subMenuElements.get(i).getText().trim());
+                    if (i < subMenuElements.size() - 1) availableSubMenus.append(", ");
+                }
+                throw new RuntimeException("Sub-menu index " + subMenuIndex + " is out of range. Available sub-menus: " + availableSubMenus.toString());
+            }
+            
+            WebElement targetSubMenu = subMenuElements.get(subMenuIndex);
+            String subMenuText = targetSubMenu.getText().trim();
+            TestUtils.logInfo("Clicking on sub-menu item: " + subMenuText);
+            
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", targetSubMenu);
+            TestUtils.waitForSeconds(2);
+            
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+            wait.until(ExpectedConditions.elementToBeClickable(targetSubMenu));
+            
+            try {
+                targetSubMenu.click();
+                TestUtils.logSuccess("Normal click successful for sub-menu: " + subMenuText);
+            } catch (Exception e) {
+                TestUtils.logInfo("Normal click failed, trying JavaScript click...");
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", targetSubMenu);
+                TestUtils.logSuccess("JavaScript click successful for sub-menu: " + subMenuText);
+            }
+            
+            TestUtils.logInfo("Waiting 5 seconds to see the click effect...");
+            TestUtils.waitForSeconds(5);
+            
+            String currentUrl = driver.getCurrentUrl();
+            TestUtils.logInfo("Current URL after click: " + currentUrl);
+            
+            TestUtils.waitForPageToLoad(driver, 15);
+            TestUtils.logInfo("Page load completed after sub-menu selection");
+            
+            String finalUrl = driver.getCurrentUrl();
+            TestUtils.logInfo("Final URL after page load: " + finalUrl);
+            
+        } catch (Exception e) {
+            TestUtils.logError("Sub-menu selection failed for index: " + subMenuIndex, e);
+            throw new RuntimeException("Sub-menu selection failed for index: " + subMenuIndex, e);
+        }
+    }
+
+    // Parametrik modül ve alt menü seçimi (eski metod - geriye uyumluluk için)
+    protected void selectModuleSubMenu(String moduleName, int subMenuIndex, int timeoutSeconds) {
+        try {
+            TestUtils.logInfo("Selecting module: " + moduleName + " with sub-menu index: " + subMenuIndex);
+            
+            // Driver'ı aktif hale getir
+            driver = getActiveDriver();
+            
+            // Ana modüle tıkla (zaten selectMenu ile tıklanmış olmalı)
+            TestUtils.logInfo("Module '" + moduleName + "' should already be selected");
+            
+            // Modül açılması için kısa bekleme
+            TestUtils.waitForSeconds(2);
+            
+            // Menü barını sonuna kadar scroll yap
+            scrollMenuToBottom();
+            
+            // Scroll sonrası kısa bekleme
+            TestUtils.waitForSeconds(2);
+            
+            // Sadece belirtilen modüle bağlı alt menüleri bul
+            By subMenuItems = By.cssSelector("ul li ul li");
+            List<WebElement> allSubMenuElements = driver.findElements(subMenuItems);
+            
+            // Sadece belirtilen modüle ait olanları filtrele
+            List<WebElement> subMenuElements = new java.util.ArrayList<>();
+            for (WebElement subMenu : allSubMenuElements) {
+                try {
+                    // Alt menünün parent'ını bul (ul li ul li -> ul li -> ul li)
+                    WebElement parentUl = subMenu.findElement(By.xpath("./.."));
+                    WebElement parentLi = parentUl.findElement(By.xpath("./.."));
+                    String parentText = parentLi.getText().trim();
+                    
+                    // Eğer parent belirtilen modülü içeriyorsa ekle
+                    if (parentText.contains(moduleName)) {
+                        subMenuElements.add(subMenu);
+                    }
+                } catch (Exception e) {
+                    // Bu alt menü belirtilen modüle ait değil, atla
+                }
+            }
+            
+            TestUtils.logInfo("After scroll, found " + subMenuElements.size() + " sub-menu items for module: " + moduleName);
+            
+            // Tüm alt menüleri listele
+            TestUtils.logInfo("Available sub-menus after scroll:");
+            for (int i = 0; i < subMenuElements.size(); i++) {
+                String subMenuText = subMenuElements.get(i).getText().trim();
+                TestUtils.logInfo("Index " + i + ": " + subMenuText);
+            }
+            
+            // Index kontrolü
+            if (subMenuIndex < 0 || subMenuIndex >= subMenuElements.size()) {
+                // Mevcut alt menüleri listele
+                StringBuilder availableSubMenus = new StringBuilder();
+                for (int i = 0; i < subMenuElements.size(); i++) {
+                    availableSubMenus.append(i).append(": ").append(subMenuElements.get(i).getText().trim());
+                    if (i < subMenuElements.size() - 1) availableSubMenus.append(", ");
+                }
+                throw new RuntimeException("Sub-menu index " + subMenuIndex + " is out of range for module '" + moduleName + "'. Available sub-menus: " + availableSubMenus.toString());
+            }
+            
+            // Belirtilen index'teki alt menüyü seç
+            WebElement targetSubMenu = subMenuElements.get(subMenuIndex);
+            String subMenuText = targetSubMenu.getText().trim();
+            
+            TestUtils.logInfo("Clicking on sub-menu item: " + subMenuText);
+            
+            // Alt menüyü görünür hale getir (JavaScript scroll)
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", targetSubMenu);
+            TestUtils.waitForSeconds(2);
+            
+            // Element tıklanabilir olana kadar bekle (spesifik element için)
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+            wait.until(ExpectedConditions.elementToBeClickable(targetSubMenu));
+            
+            // Önce normal tıklama dene
+            try {
+                targetSubMenu.click();
+                TestUtils.logSuccess("Normal click successful for sub-menu: " + subMenuText);
+            } catch (Exception e) {
+                TestUtils.logInfo("Normal click failed, trying JavaScript click...");
+                // JavaScript ile tıkla (daha güvenilir)
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", targetSubMenu);
+                TestUtils.logSuccess("JavaScript click successful for sub-menu: " + subMenuText);
+            }
+            
+            // Tıklama sonrası görsel delay (3 saniye)
+            TestUtils.logInfo("Waiting 3 seconds to see the click effect...");
+            TestUtils.waitForSeconds(3);
+            
+            // URL değişikliğini kontrol et
+            String currentUrl = driver.getCurrentUrl();
+            TestUtils.logInfo("Current URL after click: " + currentUrl);
+            
+            // Eğer URL değişmediyse, sayfa içeriğini kontrol et
+            if (currentUrl.equals("https://teamso.com/dashboard")) {
+                TestUtils.logInfo("URL did not change, checking page content...");
+                // Sayfa içeriğinde alt menü metnini ara
+                try {
+                    WebElement pageContent = driver.findElement(By.tagName("body"));
+                    String pageText = pageContent.getText();
+                    if (pageText.contains(subMenuText)) {
+                        TestUtils.logSuccess("Sub-menu content found on page: " + subMenuText);
+                    } else {
+                        TestUtils.logInfo("Sub-menu content not found on page, but click was successful");
+                    }
+                } catch (Exception e) {
+                    TestUtils.logInfo("Could not check page content, but click was successful");
+                }
+            }
+            
+            // URL değişikliğini kontrol et
+            TestUtils.logInfo("Current URL after click: " + currentUrl);
+            
+            // Sayfa yüklenene kadar bekle
+            TestUtils.waitForPageToLoad(driver, 15);
+            TestUtils.logInfo("Page load completed after sub-menu selection");
+            
+            // Final URL kontrolü
+            String finalUrl = driver.getCurrentUrl();
+            TestUtils.logInfo("Final URL after page load: " + finalUrl);
+            
+        } catch (Exception e) {
+            TestUtils.logError("Module sub-menu selection failed for: " + moduleName + " index: " + subMenuIndex, e);
+            throw new RuntimeException("Module sub-menu selection failed for: " + moduleName + " index: " + subMenuIndex, e);
+        }
+    }
 
 }
