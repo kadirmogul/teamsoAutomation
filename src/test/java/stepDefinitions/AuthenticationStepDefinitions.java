@@ -25,12 +25,12 @@ public class AuthenticationStepDefinitions extends BaseTest {
     @Before
     public void setUp() {
         try {
-            // Sadece driver yoksa yeni oluştur, varsa kullan
-            if (driver == null) {
-                TestUtils.logInfo("Driver reset for new test");
-            } else {
-                TestUtils.logInfo("Using existing driver for test");
+            // Her test için yeni driver oluştur
+            if (driver != null) {
+                driver.quit();
+                driver = null;
             }
+            TestUtils.logInfo("Driver reset for new test");
         } catch (Exception e) {
             TestUtils.logError("Failed to setup driver", e);
         }

@@ -40,11 +40,86 @@ public abstract class BaseTest {
     }
 
     // ========== BROWSER CONTROL ==========
-    
+
     // Browser maximize
     protected void maximizeBrowser() {
         driver.manage().window().maximize();
         TestUtils.logInfo("Browser maximized");
+    }
+
+    // ========== SMART WAIT SYSTEM ==========
+    
+    // Akıllı element bekleme - element görünür olana kadar bekle
+    protected void waitForElementToBeVisible(By locator, int timeoutSeconds) {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            TestUtils.logInfo("Element became visible: " + locator);
+        } catch (Exception e) {
+            TestUtils.logError("Element did not become visible within " + timeoutSeconds + " seconds: " + locator, e);
+            throw e;
+        }
+    }
+    
+    // Akıllı element bekleme - element tıklanabilir olana kadar bekle
+    protected void waitForElementToBeClickable(By locator, int timeoutSeconds) {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+            wait.until(ExpectedConditions.elementToBeClickable(locator));
+            TestUtils.logInfo("Element became clickable: " + locator);
+        } catch (Exception e) {
+            TestUtils.logError("Element did not become clickable within " + timeoutSeconds + " seconds: " + locator, e);
+            throw e;
+        }
+    }
+    
+    // Akıllı element bekleme - element tıklanabilir olana kadar bekle (WebElement)
+    protected void waitForElementToBeClickable(WebElement element, int timeoutSeconds) {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+            wait.until(ExpectedConditions.elementToBeClickable(element));
+            TestUtils.logInfo("Element became clickable: " + element.getTagName());
+        } catch (Exception e) {
+            TestUtils.logError("Element did not become clickable within " + timeoutSeconds + " seconds", e);
+            throw e;
+        }
+    }
+    
+    // Akıllı sayfa yükleme bekleme - URL değişene kadar bekle
+    protected void waitForUrlToChange(String currentUrl, int timeoutSeconds) {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+            wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentUrl)));
+            TestUtils.logInfo("URL changed from: " + currentUrl + " to: " + driver.getCurrentUrl());
+        } catch (Exception e) {
+            TestUtils.logInfo("URL did not change within " + timeoutSeconds + " seconds, continuing...");
+        }
+    }
+    
+    // Akıllı element listesi bekleme - belirli sayıda element bulunana kadar bekle
+    protected List<WebElement> waitForElementsToBePresent(By locator, int expectedCount, int timeoutSeconds) {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+            wait.until(driver -> driver.findElements(locator).size() >= expectedCount);
+            List<WebElement> elements = driver.findElements(locator);
+            TestUtils.logInfo("Found " + elements.size() + " elements: " + locator);
+            return elements;
+        } catch (Exception e) {
+            TestUtils.logError("Expected " + expectedCount + " elements not found within " + timeoutSeconds + " seconds: " + locator, e);
+            throw e;
+        }
+    }
+    
+    // Akıllı menü genişleme bekleme - sub-menu elementleri görünene kadar bekle
+    protected void waitForSubMenuToExpand(int timeoutSeconds) {
+        try {
+            By subMenuLocator = By.cssSelector(".sub-menu.mm-collapse.mm-show");
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+            wait.until(ExpectedConditions.presenceOfElementLocated(subMenuLocator));
+            TestUtils.logInfo("Sub-menu expanded successfully");
+        } catch (Exception e) {
+            TestUtils.logInfo("Sub-menu expansion timeout, continuing...");
+        }
     }
 
     // ========== ELEMENT INTERACTION HELPERS ==========
@@ -59,8 +134,8 @@ public abstract class BaseTest {
     // Element bul (tek element) - Normal timeout ile
     protected WebElement findElement(By locator, int timeoutSeconds) {
         try {
-            TestUtils.waitForElementVisible(driver, locator, timeoutSeconds);
-            WebElement element = driver.findElement(locator);
+        TestUtils.waitForElementVisible(driver, locator, timeoutSeconds);
+        WebElement element = driver.findElement(locator);
             TestUtils.logSuccess("Element found: " + locator);
             return element;
         } catch (Exception e) {
@@ -123,7 +198,7 @@ public abstract class BaseTest {
             return false;
         }
     }
-    
+
     // Element tıklanabilir mi kontrol et
     protected boolean isElementClickable(By locator, int timeoutSeconds) {
         try {
@@ -134,7 +209,7 @@ public abstract class BaseTest {
             return false;
         }
     }
-    
+
     // Element text'ini al
     protected String getElementText(By locator, int timeoutSeconds) {
         try {
@@ -147,7 +222,7 @@ public abstract class BaseTest {
             return "";
         }
     }
-    
+
     // Element attribute'unu al
     protected String getElementAttribute(By locator, String attribute, int timeoutSeconds) {
         try {
@@ -160,7 +235,7 @@ public abstract class BaseTest {
             return "";
         }
     }
-    
+
     // Element'e text yaz
     protected void setElementText(By locator, String text, int timeoutSeconds) {
         try {
@@ -180,7 +255,7 @@ public abstract class BaseTest {
             WebElement element = findElement(locator, timeoutSeconds);
             element.click();
             TestUtils.logSuccess("Element clicked: " + locator);
-        } catch (Exception e) {
+            } catch (Exception e) {
             TestUtils.logError("Failed to click element", e);
             throw new RuntimeException("Failed to click element", e);
         }
@@ -208,7 +283,7 @@ public abstract class BaseTest {
                 element.click();
             }
             TestUtils.logSuccess("Clicked " + elements.size() + " elements: " + locator);
-        } catch (Exception e) {
+            } catch (Exception e) {
             TestUtils.logError("Failed to click multiple elements", e);
             throw new RuntimeException("Failed to click multiple elements", e);
         }
@@ -256,7 +331,7 @@ public abstract class BaseTest {
             }
             TestUtils.logSuccess("All " + elements.size() + " elements are visible");
             return true;
-        } catch (Exception e) {
+            } catch (Exception e) {
             TestUtils.logError("Failed to check visibility of multiple elements", e);
             return false;
         }
@@ -319,7 +394,7 @@ public abstract class BaseTest {
             boolean result = expectedText.equals(actualText);
             TestUtils.logInfo("Element text check - actual: " + actualText + " (expected: " + expectedText + ")");
             return result;
-        } catch (Exception e) {
+            } catch (Exception e) {
             TestUtils.logError("Failed to check element text", e);
             return false;
         }
@@ -418,13 +493,9 @@ public abstract class BaseTest {
         }
         throw new RuntimeException("Element still present after smart wait: " + locator);
     }
-    
+
     // URL değişene kadar bekle
-    protected void waitForUrlToChange(String oldUrl, int timeoutSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(oldUrl)));
-        TestUtils.logSuccess("URL changed from: " + oldUrl);
-    }
+
 
     // ========== FAST FORM FILLING HELPERS ==========
     
@@ -669,7 +740,7 @@ public abstract class BaseTest {
     }
 
     // ========== WORKFLOW HELPERS ==========
-    
+
     // Ana frame'e geri dön
     protected void switchToDefaultContent() {
         driver.switchTo().defaultContent();
@@ -786,79 +857,98 @@ public abstract class BaseTest {
     // ========== MENU SELECTION HELPERS ==========
     
     // Parametrik menü seçimi - sadece modül ismine bakarak
+    // Parametrik menü seçimi (id=sidebar-menu div'ine bağlı listelerden)
     protected void selectMenu(String menuName, int timeoutSeconds) {
         try {
             TestUtils.logInfo("Selecting menu: " + menuName);
-            
-            // Driver'ı aktif hale getir
             driver = getActiveDriver();
             
-            // Sidebar menü container'ını bul
-            findElement(By.id("sidebar-menu"), timeoutSeconds);
+            // sidebar-menu div'ini bul
+            WebElement sideMenu = driver.findElement(By.id("sidebar-menu"));
             
-            // Sidebar menü içindeki ul elementini bul
-            findElement(By.cssSelector("div#sidebar-menu ul"), timeoutSeconds);
-            
-            // Ul içindeki li elementlerini bul
-            List<WebElement> menuElements = findElements(By.xpath("//div[@id='sidebar-menu']//ul//li"), timeoutSeconds);
-            
-            TestUtils.logInfo("Found " + menuElements.size() + " menu items in sidebar");
-            
-            // İlk 10 menüyü listele (debug için)
-            TestUtils.logInfo("First 10 menu items:");
-            for (int i = 0; i < Math.min(10, menuElements.size()); i++) {
-                String menuText = menuElements.get(i).getText().trim();
-                TestUtils.logInfo("Menu " + i + ": '" + menuText + "'");
-            }
-            
-            // Belirtilen menüyü bul - sadece modül ismine bakarak
+            // Menüyü bulmak için akıllı scroll yap
+            int maxAttempts = 10;
+            int attempt = 0;
             WebElement targetMenu = null;
-            int scrollAttempts = 0;
-            int maxScrollAttempts = 10;
             
-            while (targetMenu == null && scrollAttempts < maxScrollAttempts) {
-                // Tüm menü elementlerini tekrar al (scroll sonrası)
-                menuElements = driver.findElements(By.xpath("//div[@id='sidebar-menu']//ul//li"));
-                
-                for (WebElement menuElement : menuElements) {
-                    String menuText = menuElement.getText().trim();
-                    if (menuText.contains(menuName)) {
-                        targetMenu = menuElement;
-                        TestUtils.logInfo("Found menu (contains): " + menuName + " in text: '" + menuText + "'");
-                        break;
+            while (attempt < maxAttempts && targetMenu == null) {
+                try {
+                    // sidebar-menu div'i içindeki tüm li elementlerini bul
+                    List<WebElement> allMenus = sideMenu.findElements(By.xpath(".//ul//li"));
+                    TestUtils.logInfo("Found " + allMenus.size() + " menu items in sidebar");
+                    
+                    // Menüyü ara
+                    for (WebElement menuElement : allMenus) {
+                        String menuText = menuElement.getText().trim();
+                        if (menuText.contains(menuName)) {
+                            targetMenu = menuElement;
+                            TestUtils.logInfo("Found menu with contains match: " + menuName + " in text: '" + menuText + "'");
+                            break;
+                        }
                     }
-                }
-                
-                if (targetMenu == null) {
-                    TestUtils.logInfo("Menu '" + menuName + "' not found, scrolling menu bar... (attempt " + (scrollAttempts + 1) + ")");
+                    
+                    if (targetMenu == null) {
+                        TestUtils.logInfo("Menu not found, checking if element is visible... (attempt " + (attempt + 1) + ")");
+                        
+                        // Element görünür mü kontrol et
+                        if (isElementVisibleInMenu(sideMenu, menuName)) {
+                            TestUtils.logInfo("Element is visible, stopping scroll");
+                            break;
+                        }
+                        
+                        // Element görünür değilse scroll yap
+                        scrollMenuToBottom();
+                        TestUtils.waitForSeconds(2);
+                        attempt++;
+                    }
+                } catch (Exception e) {
+                    TestUtils.logInfo("Error during menu search, scrolling... (attempt " + (attempt + 1) + ")");
                     scrollMenuToBottom();
-                    TestUtils.waitForSeconds(1);
-                    scrollAttempts++;
+                    TestUtils.waitForSeconds(2);
+                    attempt++;
                 }
             }
             
             if (targetMenu == null) {
                 // Mevcut menüleri listele
+                List<WebElement> allMenus = sideMenu.findElements(By.xpath(".//ul//li"));
                 StringBuilder availableMenus = new StringBuilder();
-                for (int i = 0; i < menuElements.size(); i++) {
-                    availableMenus.append(i).append(": ").append(menuElements.get(i).getText().trim());
-                    if (i < menuElements.size() - 1) availableMenus.append(", ");
+                for (int i = 0; i < allMenus.size(); i++) {
+                    String menuText = allMenus.get(i).getText().trim();
+                    if (!menuText.isEmpty()) {
+                        availableMenus.append(i).append(": ").append(menuText);
+                        if (i < allMenus.size() - 1) availableMenus.append(", ");
+                    }
                 }
-                TestUtils.logError("Menu '" + menuName + "' not found after " + maxScrollAttempts + " scroll attempts. Available menus: " + availableMenus.toString(), new Exception("Menu not found"));
-                throw new RuntimeException("Menu '" + menuName + "' not found after " + maxScrollAttempts + " scroll attempts. Available menus: " + availableMenus.toString());
+                TestUtils.logError("Menu '" + menuName + "' not found after " + maxAttempts + " attempts. Available menus: " + availableMenus.toString(), new Exception("Menu not found"));
+                throw new RuntimeException("Menu '" + menuName + "' not found after " + maxAttempts + " attempts");
             }
             
+            // Menüyü tıkla
+            String menuText = targetMenu.getText().trim();
+            TestUtils.logInfo("Clicking on menu: " + menuText);
             
-            // Menüye tıkla
-            targetMenu.click();
-            TestUtils.logSuccess("Menu '" + menuName + "' selected successfully");
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", targetMenu);
+            TestUtils.waitForSeconds(2);
+            
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+            wait.until(ExpectedConditions.elementToBeClickable(targetMenu));
+            
+            try {
+                targetMenu.click();
+                TestUtils.logSuccess("Normal click successful for menu: " + menuText);
+            } catch (Exception e) {
+                TestUtils.logInfo("Normal click failed, trying JavaScript click...");
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", targetMenu);
+                TestUtils.logSuccess("JavaScript click successful for menu: " + menuText);
+            }
             
             // Son seçilen menüyü kaydet
             lastSelectedMenu = menuName;
+            TestUtils.logInfo("Last selected menu saved: " + lastSelectedMenu);
             
-            // Sayfa yüklenene kadar bekle
-            TestUtils.waitForPageToLoad(driver, 15);
-            TestUtils.logInfo("Page load completed after menu selection");
+            TestUtils.logInfo("Waiting for menu to expand...");
+            waitForSubMenuToExpand(5);
             
         } catch (Exception e) {
             TestUtils.logError("Menu selection failed for: " + menuName, e);
@@ -866,36 +956,98 @@ public abstract class BaseTest {
         }
     }
     
-    // Menü barını sonuna kadar scroll yap
+    // Menü içinde element görünür mü kontrol et
+    private boolean isElementVisibleInMenu(WebElement menuContainer, String menuName) {
+        try {
+            List<WebElement> menuElements = menuContainer.findElements(By.xpath(".//ul//li"));
+            for (WebElement menuElement : menuElements) {
+                String menuText = menuElement.getText().trim();
+                if (menuText.contains(menuName)) {
+                    // Element bulundu, görünür mü kontrol et
+                    boolean isDisplayed = menuElement.isDisplayed();
+                    TestUtils.logInfo("Element '" + menuName + "' found, isDisplayed: " + isDisplayed);
+                    return isDisplayed;
+                }
+            }
+            TestUtils.logInfo("Element '" + menuName + "' not found in menu");
+            return false;
+        } catch (Exception e) {
+            TestUtils.logError("Error checking element visibility", e);
+            return false;
+        }
+    }
+    
+
+    
+    // Menü barını akıllı scroll yap - element görünürse scroll yapma
     protected void scrollMenuToBottom() {
         try {
-            TestUtils.logInfo("Scrolling menu bar to bottom...");
+            TestUtils.logInfo("Starting smart menu scroll...");
+            
+            // Driver'ın aktif olduğunu kontrol et
+            if (driver == null) {
+                TestUtils.logError("Driver is null, cannot scroll menu", new Exception("Driver is null"));
+                throw new RuntimeException("Driver is null, cannot scroll menu");
+            }
             
             // Menü container'ını bul
             WebElement menuContainer = driver.findElement(By.id("sidebar-menu"));
             
             // Menü yüksekliğini al
-            long lastScrollTop = (Long) ((JavascriptExecutor) driver).executeScript("return arguments[0].scrollTop;", menuContainer);
+            Object scrollTopObj = ((JavascriptExecutor) driver).executeScript("return arguments[0].scrollTop;", menuContainer);
+            Object scrollHeightObj = ((JavascriptExecutor) driver).executeScript("return arguments[0].scrollHeight;", menuContainer);
             
-            while (true) {
+            long lastScrollTop = scrollTopObj != null ? ((Number) scrollTopObj).longValue() : 0;
+            long maxScrollHeight = scrollHeightObj != null ? ((Number) scrollHeightObj).longValue() : 0;
+            
+            TestUtils.logInfo("Menu scroll info - Current: " + lastScrollTop + ", Max: " + maxScrollHeight);
+            
+            // Eğer zaten en alttaysa scroll yapma
+            if (lastScrollTop >= maxScrollHeight - 10) {
+                TestUtils.logInfo("Menu already at bottom, no scroll needed");
+                return;
+            }
+            
+            int scrollAttempts = 0;
+            int maxScrollAttempts = 10;
+            
+            while (scrollAttempts < maxScrollAttempts) {
                 // Menü içinde scroll yap
                 ((JavascriptExecutor) driver).executeScript("arguments[0].scrollTop = arguments[0].scrollHeight;", menuContainer);
                 
                 // Scroll sonrası bekle
                 TestUtils.waitForSeconds(1);
                 
-                // Yeni scroll pozisyonunu al
-                long newScrollTop = (Long) ((JavascriptExecutor) driver).executeScript("return arguments[0].scrollTop;", menuContainer);
+                                    // Yeni scroll pozisyonunu al
+                    Object newScrollTopObj = ((JavascriptExecutor) driver).executeScript("return arguments[0].scrollTop;", menuContainer);
+                    Object newScrollHeightObj = ((JavascriptExecutor) driver).executeScript("return arguments[0].scrollHeight;", menuContainer);
+                    
+                    long newScrollTop = newScrollTopObj != null ? ((Number) newScrollTopObj).longValue() : 0;
+                    long newScrollHeight = newScrollHeightObj != null ? ((Number) newScrollHeightObj).longValue() : 0;
+                
+                TestUtils.logInfo("Scroll attempt " + (scrollAttempts + 1) + " - Position: " + newScrollTop + ", Height: " + newScrollHeight);
                 
                 // Eğer scroll pozisyonu değişmediyse menü sonuna ulaştık
                 if (newScrollTop == lastScrollTop) {
-                    TestUtils.logSuccess("Reached menu bottom successfully");
+                    TestUtils.logSuccess("Reached menu bottom - no more scrolling possible");
                     break;
                 }
                 
+                // Eğer scroll height değiştiyse daha fazla içerik yüklendi, devam et
+                if (newScrollHeight > maxScrollHeight) {
+                    TestUtils.logInfo("New content loaded, continuing scroll...");
+                    maxScrollHeight = newScrollHeight;
+                }
+                
                 lastScrollTop = newScrollTop;
-                TestUtils.logInfo("Scrolled menu down, new position: " + newScrollTop);
+                scrollAttempts++;
             }
+            
+            if (scrollAttempts >= maxScrollAttempts) {
+                TestUtils.logInfo("Reached maximum scroll attempts (" + maxScrollAttempts + ")");
+            }
+            
+            TestUtils.logSuccess("Smart menu scroll completed");
             
         } catch (Exception e) {
             TestUtils.logError("Failed to scroll menu to bottom", e);
@@ -972,96 +1124,6 @@ public abstract class BaseTest {
         return lastSelectedMenu;
     }
     
-    // Parametrik alt menü seçimi (modül adı olmadan - son seçilen menüyü kullan)
-    protected void selectSubMenu(int subMenuIndex, int timeoutSeconds) {
-        try {
-            TestUtils.logInfo("Selecting sub-menu index: " + subMenuIndex);
-            driver = getActiveDriver();
-            
-            // Son seçilen menüyü kullan (zaten selectMenu ile seçilmiş olmalı)
-            TestUtils.logInfo("Using last selected menu for sub-menu selection");
-            TestUtils.waitForSeconds(2); // Modül açılması için kısa bekleme
-            scrollMenuToBottom(); // Call the menu-specific scroll
-            TestUtils.waitForSeconds(2); // Wait after scroll
-
-            // Tüm alt menüleri bul
-            By subMenuItems = By.cssSelector("ul li ul li");
-            List<WebElement> allSubMenuElements = driver.findElements(subMenuItems);
-
-            // Sadece açık olan modüle ait olanları filtrele
-            List<WebElement> subMenuElements = new java.util.ArrayList<>();
-            for (WebElement subMenu : allSubMenuElements) {
-                try {
-                    // Alt menünün parent'ını bul
-                    WebElement parentUl = subMenu.findElement(By.xpath("./.."));
-                    WebElement parentLi = parentUl.findElement(By.xpath("./.."));
-                    
-                    // Eğer parent açık ise (aria-expanded="true" veya class'ında "open" varsa)
-                    String parentClass = parentLi.getAttribute("class");
-                    String ariaExpanded = parentLi.getAttribute("aria-expanded");
-                    
-                    if (parentClass != null && (parentClass.contains("open") || parentClass.contains("active")) ||
-                        "true".equals(ariaExpanded)) {
-                        subMenuElements.add(subMenu);
-                    }
-                } catch (Exception e) {
-                    // Bu alt menü açık modüle ait değil, atla
-                }
-            }
-
-            TestUtils.logInfo("After scroll, found " + subMenuElements.size() + " sub-menu items for open module");
-            TestUtils.logInfo("Available sub-menus after scroll:");
-            for (int i = 0; i < subMenuElements.size(); i++) {
-                String subMenuText = subMenuElements.get(i).getText().trim();
-                TestUtils.logInfo("Index " + i + ": " + subMenuText);
-            }
-            
-            if (subMenuIndex < 0 || subMenuIndex >= subMenuElements.size()) {
-                StringBuilder availableSubMenus = new StringBuilder();
-                for (int i = 0; i < subMenuElements.size(); i++) {
-                    availableSubMenus.append(i).append(": ").append(subMenuElements.get(i).getText().trim());
-                    if (i < subMenuElements.size() - 1) availableSubMenus.append(", ");
-                }
-                throw new RuntimeException("Sub-menu index " + subMenuIndex + " is out of range. Available sub-menus: " + availableSubMenus.toString());
-            }
-            
-            WebElement targetSubMenu = subMenuElements.get(subMenuIndex);
-            String subMenuText = targetSubMenu.getText().trim();
-            TestUtils.logInfo("Clicking on sub-menu item: " + subMenuText);
-            
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", targetSubMenu);
-            TestUtils.waitForSeconds(2);
-            
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
-            wait.until(ExpectedConditions.elementToBeClickable(targetSubMenu));
-            
-            try {
-                targetSubMenu.click();
-                TestUtils.logSuccess("Normal click successful for sub-menu: " + subMenuText);
-            } catch (Exception e) {
-                TestUtils.logInfo("Normal click failed, trying JavaScript click...");
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", targetSubMenu);
-                TestUtils.logSuccess("JavaScript click successful for sub-menu: " + subMenuText);
-            }
-            
-            TestUtils.logInfo("Waiting 5 seconds to see the click effect...");
-            TestUtils.waitForSeconds(5);
-            
-            String currentUrl = driver.getCurrentUrl();
-            TestUtils.logInfo("Current URL after click: " + currentUrl);
-            
-            TestUtils.waitForPageToLoad(driver, 15);
-            TestUtils.logInfo("Page load completed after sub-menu selection");
-            
-            String finalUrl = driver.getCurrentUrl();
-            TestUtils.logInfo("Final URL after page load: " + finalUrl);
-            
-        } catch (Exception e) {
-            TestUtils.logError("Sub-menu selection failed for index: " + subMenuIndex, e);
-            throw new RuntimeException("Sub-menu selection failed for index: " + subMenuIndex, e);
-        }
-    }
-
     // Parametrik modül ve alt menü seçimi (eski metod - geriye uyumluluk için)
     protected void selectModuleSubMenu(String moduleName, int subMenuIndex, int timeoutSeconds) {
         try {
@@ -1073,41 +1135,102 @@ public abstract class BaseTest {
             // Ana modüle tıkla (zaten selectMenu ile tıklanmış olmalı)
             TestUtils.logInfo("Module '" + moduleName + "' should already be selected");
             
-            // Modül açılması için kısa bekleme
-            TestUtils.waitForSeconds(2);
+            // Modül açılması için akıllı bekleme
+            waitForSubMenuToExpand(3);
             
             // Menü barını sonuna kadar scroll yap
             scrollMenuToBottom();
             
-            // Scroll sonrası kısa bekleme
-            TestUtils.waitForSeconds(2);
+            // Scroll sonrası akıllı bekleme - sub-menu elementleri yüklensin
+            waitForSubMenuToExpand(2);
             
-            // Sadece belirtilen modüle bağlı alt menüleri bul
-            By subMenuItems = By.cssSelector("ul li ul li");
-            List<WebElement> allSubMenuElements = driver.findElements(subMenuItems);
+            // side-menu div'ini bul
+            WebElement sideMenu = driver.findElement(By.id("sidebar-menu"));
             
-            // Sadece belirtilen modüle ait olanları filtrele
+            // Alt menüleri bulmak için akıllı scroll yap
+            int maxAttempts = 10;
+            int attempt = 0;
             List<WebElement> subMenuElements = new java.util.ArrayList<>();
-            for (WebElement subMenu : allSubMenuElements) {
+            
+            while (attempt < maxAttempts) {
                 try {
-                    // Alt menünün parent'ını bul (ul li ul li -> ul li -> ul li)
-                    WebElement parentUl = subMenu.findElement(By.xpath("./.."));
-                    WebElement parentLi = parentUl.findElement(By.xpath("./.."));
-                    String parentText = parentLi.getText().trim();
+                    // class="sub-menu mm-collapse mm-show" olan alt listeleri bul
+                    // Daha güvenilir CSS selector kullan
+                    By subMenuLocator = By.cssSelector("ul.sub-menu.mm-collapse.mm-show > li");
+                    subMenuElements = sideMenu.findElements(subMenuLocator);
                     
-                    // Eğer parent belirtilen modülü içeriyorsa ekle
-                    if (parentText.contains(moduleName)) {
-                        subMenuElements.add(subMenu);
+                    // Eğer bulunamazsa alternatif selector dene
+                    if (subMenuElements.isEmpty()) {
+                        subMenuLocator = By.cssSelector(".sub-menu.mm-collapse.mm-show li");
+                        subMenuElements = sideMenu.findElements(subMenuLocator);
                     }
+                    
+                    // Hala bulunamazsa XPath dene
+                    if (subMenuElements.isEmpty()) {
+                        subMenuLocator = By.xpath(".//ul[contains(@class, 'sub-menu') and contains(@class, 'mm-collapse') and contains(@class, 'mm-show')]//li");
+                        subMenuElements = sideMenu.findElements(subMenuLocator);
+                    }
+                    
+                    TestUtils.logInfo("Found " + subMenuElements.size() + " sub-menu items with mm-show class");
+                    
+                    // Boş olmayan alt menüleri filtrele ve index'leri koru
+                    List<WebElement> validSubMenus = new java.util.ArrayList<>();
+                    for (int i = 0; i < subMenuElements.size(); i++) {
+                        WebElement subMenu = subMenuElements.get(i);
+                        String subMenuText = subMenu.getText().trim();
+                        if (!subMenuText.isEmpty()) {
+                            validSubMenus.add(subMenu);
+                            TestUtils.logInfo("Valid sub-menu at original index " + i + ": " + subMenuText);
+                        }
+                    }
+                    
+                    TestUtils.logInfo("Found " + validSubMenus.size() + " valid (non-empty) sub-menu items");
+                    
+                    // ÖNCE SCROLL KONTROLÜ: Element görünür mü kontrol et
+                    boolean shouldScroll = true;
+                    if (subMenuIndex < subMenuElements.size()) {
+                        WebElement targetElement = subMenuElements.get(subMenuIndex);
+                        String targetText = targetElement.getText().trim();
+                        
+                        // Element görünür ve boş değilse scroll yapma
+                        if (targetElement.isDisplayed() && !targetText.isEmpty()) {
+                            TestUtils.logInfo("Target sub-menu found and visible at index " + subMenuIndex + ": " + targetText);
+                            subMenuElements = validSubMenus;
+                            shouldScroll = false;
+                            break;
+                        } else if (targetElement.isDisplayed() && targetText.isEmpty()) {
+                            TestUtils.logError("Index " + subMenuIndex + " is empty - this is an error, not a scroll issue", new Exception("Empty element at specified index"));
+                            throw new RuntimeException("Sub-menu at index " + subMenuIndex + " is empty. Please check the correct index.");
+                        } else {
+                            TestUtils.logInfo("Target element at index " + subMenuIndex + " is not displayed, need to scroll");
+                        }
+                    } else {
+                        TestUtils.logInfo("Sub-menu index " + subMenuIndex + " is out of bounds (" + subMenuElements.size() + "), need to scroll");
+                    }
+                    
+                    // SCROLL KONTROLÜ: Sadece gerekirse scroll yap
+                    if (shouldScroll) {
+                        TestUtils.logInfo("Scrolling menu bar to find target sub-menu... (attempt " + (attempt + 1) + ")");
+                        scrollMenuToBottom();
+                        waitForSubMenuToExpand(2);
+                        attempt++;
+                    }
+                    
                 } catch (Exception e) {
-                    // Bu alt menü belirtilen modüle ait değil, atla
+                    TestUtils.logInfo("Error during sub-menu search, scrolling... (attempt " + (attempt + 1) + ")");
+                    scrollMenuToBottom();
+                    waitForSubMenuToExpand(2);
+                    attempt++;
                 }
             }
             
-            TestUtils.logInfo("After scroll, found " + subMenuElements.size() + " sub-menu items for module: " + moduleName);
+            if (subMenuElements.isEmpty()) {
+                TestUtils.logError("No sub-menu items found after " + maxAttempts + " attempts", new Exception("Sub-menu not found"));
+                throw new RuntimeException("No sub-menu items found after " + maxAttempts + " attempts");
+            }
             
             // Tüm alt menüleri listele
-            TestUtils.logInfo("Available sub-menus after scroll:");
+            TestUtils.logInfo("Available sub-menus:");
             for (int i = 0; i < subMenuElements.size(); i++) {
                 String subMenuText = subMenuElements.get(i).getText().trim();
                 TestUtils.logInfo("Index " + i + ": " + subMenuText);
@@ -1115,13 +1238,12 @@ public abstract class BaseTest {
             
             // Index kontrolü
             if (subMenuIndex < 0 || subMenuIndex >= subMenuElements.size()) {
-                // Mevcut alt menüleri listele
                 StringBuilder availableSubMenus = new StringBuilder();
                 for (int i = 0; i < subMenuElements.size(); i++) {
                     availableSubMenus.append(i).append(": ").append(subMenuElements.get(i).getText().trim());
                     if (i < subMenuElements.size() - 1) availableSubMenus.append(", ");
                 }
-                throw new RuntimeException("Sub-menu index " + subMenuIndex + " is out of range for module '" + moduleName + "'. Available sub-menus: " + availableSubMenus.toString());
+                throw new RuntimeException("Sub-menu index " + subMenuIndex + " is out of range. Available sub-menus: " + availableSubMenus.toString());
             }
             
             // Belirtilen index'teki alt menüyü seç
@@ -1132,11 +1254,9 @@ public abstract class BaseTest {
             
             // Alt menüyü görünür hale getir (JavaScript scroll)
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", targetSubMenu);
-            TestUtils.waitForSeconds(2);
             
-            // Element tıklanabilir olana kadar bekle (spesifik element için)
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
-            wait.until(ExpectedConditions.elementToBeClickable(targetSubMenu));
+            // Element tıklanabilir olana kadar akıllı bekleme
+            waitForElementToBeClickable(targetSubMenu, timeoutSeconds);
             
             // Önce normal tıklama dene
             try {
@@ -1149,12 +1269,13 @@ public abstract class BaseTest {
                 TestUtils.logSuccess("JavaScript click successful for sub-menu: " + subMenuText);
             }
             
-            // Tıklama sonrası görsel delay (3 saniye)
-            TestUtils.logInfo("Waiting 3 seconds to see the click effect...");
-            TestUtils.waitForSeconds(3);
+            // Tıklama sonrası akıllı bekleme
+            TestUtils.logInfo("Waiting for click effect...");
+            String currentUrl = driver.getCurrentUrl();
+            waitForUrlToChange(currentUrl, 5);
             
             // URL değişikliğini kontrol et
-            String currentUrl = driver.getCurrentUrl();
+            currentUrl = driver.getCurrentUrl();
             TestUtils.logInfo("Current URL after click: " + currentUrl);
             
             // Eğer URL değişmediyse, sayfa içeriğini kontrol et

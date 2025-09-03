@@ -7,7 +7,9 @@ import io.cucumber.testng.CucumberOptions;
         features="src/test/java/features/ATS",
         glue="stepDefinitions",
         plugin={"pretty","html:target/cucumber-report.html"},
-        tags="@ATS"
+        tags="@ATS",
+        monochrome=true,
+        dryRun=false
 )
 public class TestRunner extends AbstractTestNGCucumberTests {
 }

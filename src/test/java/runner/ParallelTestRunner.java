@@ -14,7 +14,7 @@ import io.cucumber.testng.CucumberOptions;
         },
         tags="@ATS",
         monochrome=true,
-        dryRun=false
+        dryRun=true  // Devre dışı bırak
 )
 public class ParallelTestRunner extends AbstractTestNGCucumberTests {
 }
