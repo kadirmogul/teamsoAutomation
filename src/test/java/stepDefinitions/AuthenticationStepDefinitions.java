@@ -14,7 +14,6 @@ import io.cucumber.java.en.And;
 import org.testng.asserts.SoftAssert;
 import utilities.BaseTest;
 import utilities.TestUtils;
-import utilities.MyDriver;
 
 public class AuthenticationStepDefinitions extends BaseTest {
 
@@ -30,7 +29,15 @@ public class AuthenticationStepDefinitions extends BaseTest {
                 driver.quit();
                 driver = null;
             }
-            TestUtils.logInfo("Driver reset for new test");
+            
+            // Her test için değişkenleri sıfırla
+            lastSelectedMenu = null;
+            lastSelectedSubMenu = null;
+            
+            // Element referanslarını da temizle (stale element önleme)
+            clearElementReferences();
+            
+            TestUtils.logInfo("Driver, variables and element references reset for new test");
         } catch (Exception e) {
             TestUtils.logError("Failed to setup driver", e);
         }
@@ -38,11 +45,16 @@ public class AuthenticationStepDefinitions extends BaseTest {
 
     // ========== AUTHENTICATION STEPS ==========
     
-    // LOGIN STEP - BaseTest'teki performLogin metodunu parametrelerle çağır
-    @Given("perform login with {string} and {string} and {string} and {string} and {string}")
-    public void perform_login_with_parameters(String pageUrl, String email, String searchText, String accountIndex, String password) {
-        // Feature'dan gelen parametreleri kullan
-        performLogin(pageUrl, email, searchText, accountIndex, password);
+    // YENİ LOGIN STEP - BaseTest'teki loginToSystem metodunu çağır
+    @Given("Login to system with {string} and {string} and {string} and {string} and {string}")
+    public void login_to_system_with_parameters(String pageUrl, String email, String searchText, String accountIndex, String password) {
+        try {
+            loginToSystem(pageUrl, email, searchText, accountIndex, password);
+            TestUtils.logSuccess("Login to system step completed successfully");
+        } catch (Exception e) {
+            TestUtils.logError("Login to system step failed", e);
+            softAssert.fail("Login to system step failed: " + e.getMessage());
+        }
     }
 
     // LOGOUT STEP - BaseTest'teki performLogout metodunu çağır
@@ -72,35 +84,18 @@ public class AuthenticationStepDefinitions extends BaseTest {
     
     // ========== MENU SELECTION STEPS ==========
     
-    @And("select menu {string}")
-    public void select_menu(String menuName) {
+    // YENİ BİRLEŞİK MENU STEP - BaseTest'teki selectMenuAndSubMenu metodunu çağır
+    @And("Select menu {string} and sub-menu {string}")
+    public void select_menu_and_submenu(String menuName, String subMenuIndex) {
         try {
-            // BaseTest'teki selectMenu metodunu çağır
-            selectMenu(menuName, 15);
-            TestUtils.logSuccess("Menu '" + menuName + "' selection step completed successfully");
+            selectMenuAndSubMenu(menuName, subMenuIndex);
+            TestUtils.logSuccess("Menu '" + menuName + "' and sub-menu '" + subMenuIndex + "' selection step completed successfully");
         } catch (Exception e) {
-            TestUtils.logError("Menu selection step failed for: " + menuName, e);
-            softAssert.fail("Menu selection step failed for: " + menuName + " - " + e.getMessage());
+            TestUtils.logError("Menu and sub-menu selection step failed for: " + menuName + " - " + subMenuIndex, e);
+            softAssert.fail("Menu and sub-menu selection step failed for: " + menuName + " - " + subMenuIndex + " - " + e.getMessage());
         }
     }
-    
-    @And("select sub-menu index {string}")
-    public void select_sub_menu_index(String subMenuIndex) {
-        try {
-            // String'i int'e çevir
-            int index = Integer.parseInt(subMenuIndex);
-            
-            // BaseTest'teki selectModuleSubMenu metodunu çağır (menuName ile)
-            // Son seçilen menüyü kullan
-            String lastSelectedMenu = getLastSelectedMenu();
-            selectModuleSubMenu(lastSelectedMenu, index, 15);
-            TestUtils.logSuccess("Sub-menu index " + index + " selection step completed successfully");
-        } catch (Exception e) {
-            TestUtils.logError("Sub-menu selection step failed for index: " + subMenuIndex, e);
-            softAssert.fail("Sub-menu selection step failed for index: " + subMenuIndex + " - " + e.getMessage());
-        }
-    }
-    
+
     @And("verify page opened successfully")
     public void verify_page_opened_successfully() {
         try {
