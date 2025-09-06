@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
@@ -879,6 +880,10 @@ public abstract class BaseTest {
     // Login to system - Yeni parametrik login metodu
     protected void loginToSystem(String pageUrl, String email, String searchText, String accountIndex, String password) {
         try {
+            // Eski değerleri temizle - eski veriler kalmasın
+            lastSelectedMenu = null;
+            lastSelectedSubMenu = null;
+            
             TestUtils.logInfo("Starting login to system with parameters...");
             performLogin(pageUrl, email, searchText, accountIndex, password);
             TestUtils.logSuccess("Login to system completed successfully");
@@ -891,20 +896,43 @@ public abstract class BaseTest {
     // Select menu and sub-menu - Yeni birleşik menu seçim metodu
     protected void selectMenuAndSubMenu(String menuName, String subMenuIndex) {
         try {
-            TestUtils.logInfo("Starting menu and sub-menu selection...");
+            // Eski değerleri temizle - eski veriler kalmasın
+            lastSelectedMenu = null;
+            lastSelectedSubMenu = null;
             
+            TestUtils.logInfo("Starting menu and sub-menu selection...");
+
             // Önce menüyü seç
             selectMenu(menuName, 15);
+
+            // Menü açılması için akıllı bekleme
+            TestUtils.logInfo("Waiting for menu to expand and sub-menu elements to appear...");
+            TestUtils.waitForSeconds(2); // Menü açılması için bekle
             
-            // Menü açıldıktan sonra element bulana kadar scroll yap
-            TestUtils.logInfo("Menu opened, starting scroll to find sub-menu elements...");
+            // Sub-menu container'ının görünmesini bekle
+            By subMenuContainer = By.cssSelector("ul.sub-menu.mm-collapse.mm-show");
+            try {
+                waitForElementToBeVisible(subMenuContainer, 5);
+                TestUtils.logInfo("Sub-menu container is visible");
+            } catch (Exception e) {
+                TestUtils.logInfo("Sub-menu container not visible, continuing...");
+            }
+
+            // Sub-menu elementlerini kontrol et
             By subMenuLocator = By.cssSelector("ul.sub-menu.mm-collapse.mm-show > li");
-            scrollUntilElementFound(subMenuLocator, 10);
+            List<WebElement> elements = driver.findElements(subMenuLocator);
             
+            if (elements.isEmpty()) {
+                TestUtils.logInfo("Sub-menu elements not found, starting scroll...");
+                scrollUntilElementFound(subMenuLocator, 5); // Scroll sayısını azalt
+            } else {
+                TestUtils.logInfo("Sub-menu elements found without scrolling: " + elements.size());
+            }
+
             // Sonra sub-menu'yu seç
             int index = Integer.parseInt(subMenuIndex);
             selectModuleSubMenu(menuName, index, 15);
-            
+
             TestUtils.logSuccess("Menu and sub-menu selection completed successfully");
         } catch (Exception e) {
             TestUtils.logError("Menu and sub-menu selection failed", e);
@@ -1257,38 +1285,6 @@ public abstract class BaseTest {
     }
     
     // Ayarlar sayfasının açıldığını doğrula
-    protected void verifySettingsPageOpened() {
-        try {
-            TestUtils.logInfo("Verifying settings page opened...");
-            
-            // Driver'ı aktif hale getir
-            driver = getActiveDriver();
-            
-            // Ayarlar sayfasının açıldığını doğrula
-            String currentUrl = driver.getCurrentUrl();
-            TestUtils.logInfo("Current URL after settings click: " + currentUrl);
-            
-            // URL'de "settings" veya "ayarlar" kelimesi var mı kontrol et
-            boolean isSettingsPage = currentUrl.toLowerCase().contains("settings") || 
-                                   currentUrl.toLowerCase().contains("ayarlar") ||
-                                   currentUrl.toLowerCase().contains("config");
-            
-            if (isSettingsPage) {
-                TestUtils.logSuccess("Settings page opened successfully - URL: " + currentUrl);
-            } else {
-                TestUtils.logError("Settings page not opened - Current URL: " + currentUrl, new Exception("Settings page verification failed"));
-                throw new RuntimeException("Settings page not opened - Expected settings page but got: " + currentUrl);
-            }
-            
-            // Sayfa başlığını da kontrol et
-            String pageTitle = driver.getTitle();
-            TestUtils.logInfo("Page title: " + pageTitle);
-            
-        } catch (Exception e) {
-            TestUtils.logError("Settings page verification failed", e);
-            throw new RuntimeException("Settings page verification failed", e);
-        }
-    }
     
 
     
@@ -1547,23 +1543,99 @@ public abstract class BaseTest {
             // Alt menüyü görünür hale getir (JavaScript scroll)
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", targetSubMenu);
             
+            // Overlay elementlerini kaldır (sticky header vs.)
+            try {
+                ((JavascriptExecutor) driver).executeScript(
+                    "var overlays = document.querySelectorAll('.sticky-header-container, .overlay, .modal-backdrop');" +
+                    "overlays.forEach(function(overlay) { overlay.style.display = 'none'; });"
+                );
+                TestUtils.logInfo("Overlay elements removed");
+            } catch (Exception e) {
+                TestUtils.logInfo("Could not remove overlays: " + e.getMessage());
+            }
+            
             // Element tıklanabilir olana kadar akıllı bekleme
             waitForElementToBeClickable(targetSubMenu, timeoutSeconds);
             
-            // Önce normal tıklama dene
+            // DEBUG: Tıklama öncesi element durumu
+            TestUtils.logInfo("=== DEBUG: Element before click ===");
+            TestUtils.logInfo("Element - Displayed: " + targetSubMenu.isDisplayed() + 
+                             ", Enabled: " + targetSubMenu.isEnabled() + 
+                             ", Text: '" + targetSubMenu.getText() + "'");
+            TestUtils.logInfo("Element - Tag: " + targetSubMenu.getTagName() + 
+                             ", Class: '" + targetSubMenu.getAttribute("class") + "'");
+            TestUtils.logInfo("Element - Location: " + targetSubMenu.getLocation());
+            TestUtils.logInfo("Element - Size: " + targetSubMenu.getSize());
+            
+            // DEBUG: Tıklama öncesi sayfa durumu
+            TestUtils.logInfo("=== DEBUG: Page before click ===");
+            TestUtils.logInfo("Page - URL: " + driver.getCurrentUrl());
+            TestUtils.logInfo("Page - Title: " + driver.getTitle());
+            
+            // Çoklu tıklama stratejisi
+            boolean clickSuccessful = false;
+            
+            // 1. Normal tıklama dene
             try {
                 targetSubMenu.click();
                 TestUtils.logSuccess("Normal click successful for sub-menu: " + subMenuText);
+                clickSuccessful = true;
             } catch (Exception e) {
-                TestUtils.logInfo("Normal click failed, trying JavaScript click...");
-                // JavaScript ile tıkla (daha güvenilir)
-                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", targetSubMenu);
-                TestUtils.logSuccess("JavaScript click successful for sub-menu: " + subMenuText);
+                TestUtils.logInfo("Normal click failed: " + e.getMessage());
             }
+            
+            // 2. JavaScript tıklama dene
+            if (!clickSuccessful) {
+                try {
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", targetSubMenu);
+                    TestUtils.logSuccess("JavaScript click successful for sub-menu: " + subMenuText);
+                    clickSuccessful = true;
+                } catch (Exception e) {
+                    TestUtils.logInfo("JavaScript click failed: " + e.getMessage());
+                }
+            }
+            
+            // 3. Action Chain tıklama dene
+            if (!clickSuccessful) {
+                try {
+                    Actions actions = new Actions(driver);
+                    actions.moveToElement(targetSubMenu).click().perform();
+                    TestUtils.logSuccess("Action Chain click successful for sub-menu: " + subMenuText);
+                    clickSuccessful = true;
+                } catch (Exception e) {
+                    TestUtils.logInfo("Action Chain click failed: " + e.getMessage());
+                }
+            }
+            
+            // 4. Force tıklama dene
+            if (!clickSuccessful) {
+                try {
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].dispatchEvent(new MouseEvent('click', {bubbles: true}));", targetSubMenu);
+                    TestUtils.logSuccess("Force click successful for sub-menu: " + subMenuText);
+                    clickSuccessful = true;
+                } catch (Exception e) {
+                    TestUtils.logInfo("Force click failed: " + e.getMessage());
+                }
+            }
+            
+            if (!clickSuccessful) {
+                TestUtils.logError("All click methods failed for sub-menu: " + subMenuText, new Exception("Click failed"));
+                throw new RuntimeException("Could not click on sub-menu: " + subMenuText);
+            }
+            
+            // DEBUG: Tıklama sonrası durum
+            TestUtils.logInfo("=== DEBUG: After click ===");
+            TestUtils.logInfo("Click successful: " + clickSuccessful);
             
             // Tıklama sonrası akıllı bekleme
             TestUtils.logInfo("Waiting for click effect...");
             String currentUrl = driver.getCurrentUrl();
+            
+            // DEBUG: Tıklama sonrası sayfa durumu
+            TestUtils.logInfo("=== DEBUG: Page after click ===");
+            TestUtils.logInfo("Page - URL: " + currentUrl);
+            TestUtils.logInfo("Page - Title: " + driver.getTitle());
+            
             waitForUrlToChange(currentUrl, 5);
             
             // URL değişikliğini kontrol et
@@ -1573,25 +1645,58 @@ public abstract class BaseTest {
             // Eğer URL değişmediyse, sayfa içeriğini kontrol et
             if (currentUrl.equals("https://teamso.com/dashboard")) {
                 TestUtils.logInfo("URL did not change, checking page content...");
-                // Sayfa içeriğinde alt menü metnini ara
+                
+                // Spesifik sayfa elementlerini kontrol et
+                boolean pageOpened = false;
+                
+                // 1. Sayfa başlığı kontrolü
+                String pageTitle = driver.getTitle();
+                if (pageTitle.contains("İzin") || pageTitle.contains("Permission")) {
+                    TestUtils.logSuccess("Page opened - Title contains: " + pageTitle);
+                    pageOpened = true;
+                }
+                
+                // 2. Spesifik sayfa elementleri kontrolü
                 try {
-                    WebElement pageContent = driver.findElement(By.tagName("body"));
-                    String pageText = pageContent.getText();
-                    if (pageText.contains(subMenuText)) {
-                        TestUtils.logSuccess("Sub-menu content found on page: " + subMenuText);
-                    } else {
-                        TestUtils.logInfo("Sub-menu content not found on page, but click was successful");
+                    // İzin Kuralları sayfasına özgü elementler
+                    By specificElements = By.xpath("//h1[contains(text(), 'İzin') or contains(text(), 'Permission')] | //h2[contains(text(), 'İzin') or contains(text(), 'Permission')] | //div[contains(@class, 'page-title') and contains(text(), 'İzin')]");
+                    List<WebElement> pageElements = driver.findElements(specificElements);
+                    
+                    if (!pageElements.isEmpty()) {
+                        TestUtils.logSuccess("Page opened - Specific page elements found: " + pageElements.size());
+                        pageOpened = true;
                     }
                 } catch (Exception e) {
-                    TestUtils.logInfo("Could not check page content, but click was successful");
+                    TestUtils.logInfo("Could not check specific page elements");
+                }
+                
+                // 3. Sayfa içeriğinde alt menü metnini ara (fallback)
+                if (!pageOpened) {
+                    try {
+                        WebElement pageContent = driver.findElement(By.tagName("body"));
+                        String pageText = pageContent.getText();
+                        if (pageText.contains(subMenuText)) {
+                            TestUtils.logSuccess("Sub-menu content found on page: " + subMenuText);
+                            pageOpened = true;
+                        } else {
+                            TestUtils.logError("Page did not open - Sub-menu content not found", new Exception("Content not found"));
+                        }
+                    } catch (Exception e) {
+                        TestUtils.logError("Could not check page content", e);
+                    }
+                }
+                
+                if (!pageOpened) {
+                    TestUtils.logError("Page verification failed - No evidence of page opening", new Exception("Page not opened"));
+                    throw new RuntimeException("Page did not open after sub-menu selection");
                 }
             }
             
             // URL değişikliğini kontrol et
             TestUtils.logInfo("Current URL after click: " + currentUrl);
             
-            // Sayfa yüklenene kadar bekle
-            TestUtils.waitForPageToLoad(driver, 15);
+            // Sayfa yüklenene kadar bekle (daha kısa süre)
+            TestUtils.waitForPageToLoad(driver, 10);
             TestUtils.logInfo("Page load completed after sub-menu selection");
             
             // Final URL kontrolü

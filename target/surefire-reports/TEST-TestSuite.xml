@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="TestSuite" time="43.433" tests="4" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="TestSuite" time="32.52" tests="2" errors="0" skipped="0" failures="1">
   <properties>
     <property name="java.specification.version" value="23"/>
     <property name="webdriver.chrome.driver" value="/Users/lekegames/.cache/selenium/chromedriver/mac-arm64/139.0.7258.154/chromedriver"/>
@@ -14,7 +14,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="TR"/>
     <property name="sun.boot.library.path" value="/Users/lekegames/Library/Java/JavaVirtualMachines/openjdk-23.0.2/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/lekegames/Desktop/teamsoAutomation/target/surefire/surefirebooter-20250901173004544_3.jar /Users/lekegames/Desktop/teamsoAutomation/target/surefire 2025-09-01T17-30-04_506-jvmRun1 surefire-20250901173004544_1tmp surefire_0-20250901173004544_2tmp"/>
+    <property name="sun.java.command" value="/Users/lekegames/Desktop/teamsoAutomation/target/surefire/surefirebooter-20250906155913386_3.jar /Users/lekegames/Desktop/teamsoAutomation/target/surefire 2025-09-06T15-59-13_350-jvmRun1 surefire-20250906155913386_1tmp surefire_0-20250906155913386_2tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/Users/lekegames/Desktop/teamsoAutomation/target/test-classes:/Users/lekegames/Desktop/teamsoAutomation/target/classes:/Users/lekegames/.m2/repository/io/cucumber/cucumber-java/7.11.1/cucumber-java-7.11.1.jar:/Users/lekegames/.m2/repository/io/cucumber/cucumber-core/7.11.1/cucumber-core-7.11.1.jar:/Users/lekegames/.m2/repository/io/cucumber/cucumber-gherkin/7.11.1/cucumber-gherkin-7.11.1.jar:/Users/lekegames/.m2/repository/io/cucumber/cucumber-gherkin-messages/7.11.1/cucumber-gherkin-messages-7.11.1.jar:/Users/lekegames/.m2/repository/io/cucumber/gherkin/26.0.3/gherkin-26.0.3.jar:/Users/lekegames/.m2/repository/io/cucumber/messages/21.0.1/messages-21.0.1.jar:/Users/lekegames/.m2/repository/io/cucumber/tag-expressions/5.0.1/tag-expressions-5.0.1.jar:/Users/lekegames/.m2/repository/io/cucumber/cucumber-expressions/16.1.2/cucumber-expressions-16.1.2.jar:/Users/lekegames/.m2/repository/io/cucumber/datatable/7.11.1/datatable-7.11.1.jar:/Users/lekegames/.m2/repository/io/cucumber/cucumber-plugin/7.11.1/cucumber-plugin-7.11.1.jar:/Users/lekegames/.m2/repository/io/cucumber/docstring/7.11.1/docstring-7.11.1.jar:/Users/lekegames/.m2/repository/io/cucumber/html-formatter/20.2.1/html-formatter-20.2.1.jar:/Users/lekegames/.m2/repository/io/cucumber/junit-xml-formatter/0.1.0/junit-xml-formatter-0.1.0.jar:/Users/lekegames/.m2/repository/io/cucumber/ci-environment/9.1.0/ci-environment-9.1.0.jar:/Users/lekegames/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/Users/lekegames/.m2/repository/io/cucumber/cucumber-testng/7.11.1/cucumber-testng-7.11.1.jar:/Users/lekegames/.m2/repository/io/cucumber/cucumber-picocontainer/7.11.1/cucumber-picocontainer-7.11.1.jar:/Users/lekegames/.m2/repository/org/picocontainer/picocontainer/2.15/picocontainer-2.15.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-java/4.8.1/selenium-java-4.8.1.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-api/4.8.1/selenium-api-4.8.1.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-chrome-driver/4.8.1/selenium-chrome-driver-4.8.1.jar:/Users/lekegames/.m2/repository/com/google/auto/service/auto-service-annotations/1.0.1/auto-service-annotations-1.0.1.jar:/Users/lekegames/.m2/repository/com/google/auto/service/auto-service/1.0.1/auto-service-1.0.1.jar:/Users/lekegames/.m2/repository/com/google/auto/auto-common/1.2/auto-common-1.2.jar:/Users/lekegames/.m2/repository/com/google/guava/guava/31.1-jre/guava-31.1-jre.jar:/Users/lekegames/.m2/repository/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/Users/lekegames/.m2/repository/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/Users/lekegames/.m2/repository/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/Users/lekegames/.m2/repository/org/checkerframework/checker-qual/3.12.0/checker-qual-3.12.0.jar:/Users/lekegames/.m2/repository/com/google/errorprone/error_prone_annotations/2.11.0/error_prone_annotations-2.11.0.jar:/Users/lekegames/.m2/repository/com/google/j2objc/j2objc-annotations/1.3/j2objc-annotations-1.3.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-chromium-driver/4.8.1/selenium-chromium-driver-4.8.1.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-json/4.8.1/selenium-json-4.8.1.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v108/4.8.1/selenium-devtools-v108-4.8.1.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v109/4.8.1/selenium-devtools-v109-4.8.1.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v110/4.8.1/selenium-devtools-v110-4.8.1.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-devtools-v85/4.8.1/selenium-devtools-v85-4.8.1.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-edge-driver/4.8.1/selenium-edge-driver-4.8.1.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-firefox-driver/4.8.1/selenium-firefox-driver-4.8.1.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-http/4.8.1/selenium-http-4.8.1.jar:/Users/lekegames/.m2/repository/dev/failsafe/failsafe/3.3.0/failsafe-3.3.0.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-ie-driver/4.8.1/selenium-ie-driver-4.8.1.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-remote-driver/4.8.1/selenium-remote-driver-4.8.1.jar:/Users/lekegames/.m2/repository/io/netty/netty-buffer/4.1.87.Final/netty-buffer-4.1.87.Final.jar:/Users/lekegames/.m2/repository/io/netty/netty-codec-http/4.1.87.Final/netty-codec-http-4.1.87.Final.jar:/Users/lekegames/.m2/repository/io/netty/netty-codec/4.1.87.Final/netty-codec-4.1.87.Final.jar:/Users/lekegames/.m2/repository/io/netty/netty-handler/4.1.87.Final/netty-handler-4.1.87.Final.jar:/Users/lekegames/.m2/repository/io/netty/netty-common/4.1.87.Final/netty-common-4.1.87.Final.jar:/Users/lekegames/.m2/repository/io/netty/netty-transport-classes-epoll/4.1.87.Final/netty-transport-classes-epoll-4.1.87.Final.jar:/Users/lekegames/.m2/repository/io/netty/netty-transport-classes-kqueue/4.1.87.Final/netty-transport-classes-kqueue-4.1.87.Final.jar:/Users/lekegames/.m2/repository/io/netty/netty-transport-native-epoll/4.1.87.Final/netty-transport-native-epoll-4.1.87.Final.jar:/Users/lekegames/.m2/repository/io/netty/netty-transport-native-kqueue/4.1.87.Final/netty-transport-native-kqueue-4.1.87.Final.jar:/Users/lekegames/.m2/repository/io/netty/netty-transport-native-unix-common/4.1.87.Final/netty-transport-native-unix-common-4.1.87.Final.jar:/Users/lekegames/.m2/repository/io/netty/netty-transport/4.1.87.Final/netty-transport-4.1.87.Final.jar:/Users/lekegames/.m2/repository/io/netty/netty-resolver/4.1.87.Final/netty-resolver-4.1.87.Final.jar:/Users/lekegames/.m2/repository/io/opentelemetry/opentelemetry-api/1.22.0/opentelemetry-api-1.22.0.jar:/Users/lekegames/.m2/repository/io/opentelemetry/opentelemetry-context/1.22.0/opentelemetry-context-1.22.0.jar:/Users/lekegames/.m2/repository/io/opentelemetry/opentelemetry-exporter-logging/1.22.0/opentelemetry-exporter-logging-1.22.0.jar:/Users/lekegames/.m2/repository/io/opentelemetry/opentelemetry-sdk-metrics/1.22.0/opentelemetry-sdk-metrics-1.22.0.jar:/Users/lekegames/.m2/repository/io/opentelemetry/opentelemetry-sdk-logs/1.22.0-alpha/opentelemetry-sdk-logs-1.22.0-alpha.jar:/Users/lekegames/.m2/repository/io/opentelemetry/opentelemetry-api-logs/1.22.0-alpha/opentelemetry-api-logs-1.22.0-alpha.jar:/Users/lekegames/.m2/repository/io/opentelemetry/opentelemetry-sdk-common/1.22.0/opentelemetry-sdk-common-1.22.0.jar:/Users/lekegames/.m2/repository/io/opentelemetry/opentelemetry-sdk-extension-autoconfigure-spi/1.22.0/opentelemetry-sdk-extension-autoconfigure-spi-1.22.0.jar:/Users/lekegames/.m2/repository/io/opentelemetry/opentelemetry-sdk-extension-autoconfigure/1.22.0-alpha/opentelemetry-sdk-extension-autoconfigure-1.22.0-alpha.jar:/Users/lekegames/.m2/repository/io/opentelemetry/opentelemetry-sdk-trace/1.22.0/opentelemetry-sdk-trace-1.22.0.jar:/Users/lekegames/.m2/repository/io/opentelemetry/opentelemetry-sdk/1.22.0/opentelemetry-sdk-1.22.0.jar:/Users/lekegames/.m2/repository/io/opentelemetry/opentelemetry-semconv/1.22.0-alpha/opentelemetry-semconv-1.22.0-alpha.jar:/Users/lekegames/.m2/repository/io/ous/jtoml/2.0.0/jtoml-2.0.0.jar:/Users/lekegames/.m2/repository/net/bytebuddy/byte-buddy/1.12.22/byte-buddy-1.12.22.jar:/Users/lekegames/.m2/repository/org/apache/commons/commons-exec/1.3/commons-exec-1.3.jar:/Users/lekegames/.m2/repository/org/asynchttpclient/async-http-client/2.12.3/async-http-client-2.12.3.jar:/Users/lekegames/.m2/repository/org/asynchttpclient/async-http-client-netty-utils/2.12.3/async-http-client-netty-utils-2.12.3.jar:/Users/lekegames/.m2/repository/io/netty/netty-codec-socks/4.1.60.Final/netty-codec-socks-4.1.60.Final.jar:/Users/lekegames/.m2/repository/io/netty/netty-handler-proxy/4.1.60.Final/netty-handler-proxy-4.1.60.Final.jar:/Users/lekegames/.m2/repository/io/netty/netty-transport-native-epoll/4.1.60.Final/netty-transport-native-epoll-4.1.60.Final-linux-x86_64.jar:/Users/lekegames/.m2/repository/io/netty/netty-transport-native-kqueue/4.1.60.Final/netty-transport-native-kqueue-4.1.60.Final-osx-x86_64.jar:/Users/lekegames/.m2/repository/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar:/Users/lekegames/.m2/repository/com/typesafe/netty/netty-reactive-streams/2.0.4/netty-reactive-streams-2.0.4.jar:/Users/lekegames/.m2/repository/com/sun/activation/jakarta.activation/1.2.2/jakarta.activation-1.2.2.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-manager/4.8.1/selenium-manager-4.8.1.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-safari-driver/4.8.1/selenium-safari-driver-4.8.1.jar:/Users/lekegames/.m2/repository/org/seleniumhq/selenium/selenium-support/4.8.1/selenium-support-4.8.1.jar:/Users/lekegames/.m2/repository/io/github/bonigarcia/webdrivermanager/5.6.3/webdrivermanager-5.6.3.jar:/Users/lekegames/.m2/repository/org/slf4j/slf4j-api/2.0.10/slf4j-api-2.0.10.jar:/Users/lekegames/.m2/repository/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:/Users/lekegames/.m2/repository/com/github/docker-java/docker-java/3.3.4/docker-java-3.3.4.jar:/Users/lekegames/.m2/repository/com/github/docker-java/docker-java-core/3.3.4/docker-java-core-3.3.4.jar:/Users/lekegames/.m2/repository/com/github/docker-java/docker-java-api/3.3.4/docker-java-api-3.3.4.jar:/Users/lekegames/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.10.3/jackson-annotations-2.10.3.jar:/Users/lekegames/.m2/repository/commons-io/commons-io/2.13.0/commons-io-2.13.0.jar:/Users/lekegames/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.10.3/jackson-databind-2.10.3.jar:/Users/lekegames/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.10.3/jackson-core-2.10.3.jar:/Users/lekegames/.m2/repository/org/bouncycastle/bcpkix-jdk18on/1.76/bcpkix-jdk18on-1.76.jar:/Users/lekegames/.m2/repository/org/bouncycastle/bcprov-jdk18on/1.76/bcprov-jdk18on-1.76.jar:/Users/lekegames/.m2/repository/org/bouncycastle/bcutil-jdk18on/1.76/bcutil-jdk18on-1.76.jar:/Users/lekegames/.m2/repository/org/slf4j/jcl-over-slf4j/1.7.30/jcl-over-slf4j-1.7.30.jar:/Users/lekegames/.m2/repository/com/github/docker-java/docker-java-transport-httpclient5/3.3.4/docker-java-transport-httpclient5-3.3.4.jar:/Users/lekegames/.m2/repository/com/github/docker-java/docker-java-transport/3.3.4/docker-java-transport-3.3.4.jar:/Users/lekegames/.m2/repository/net/java/dev/jna/jna/5.13.0/jna-5.13.0.jar:/Users/lekegames/.m2/repository/org/brotli/dec/0.1.2/dec-0.1.2.jar:/Users/lekegames/.m2/repository/org/apache/commons/commons-lang3/3.14.0/commons-lang3-3.14.0.jar:/Users/lekegames/.m2/repository/org/apache/commons/commons-compress/1.25.0/commons-compress-1.25.0.jar:/Users/lekegames/.m2/repository/org/apache/httpcomponents/client5/httpclient5/5.2.1/httpclient5-5.2.1.jar:/Users/lekegames/.m2/repository/org/apache/httpcomponents/core5/httpcore5/5.2/httpcore5-5.2.jar:/Users/lekegames/.m2/repository/org/apache/httpcomponents/core5/httpcore5-h2/5.2/httpcore5-h2-5.2.jar:/Users/lekegames/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/Users/lekegames/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/lekegames/.m2/repository/org/testng/testng/7.7.1/testng-7.7.1.jar:/Users/lekegames/.m2/repository/com/beust/jcommander/1.82/jcommander-1.82.jar:/Users/lekegames/.m2/repository/org/webjars/jquery/3.6.1/jquery-3.6.1.jar:"/>
@@ -31,7 +31,7 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="apple.awt.application.name" value="ForkedBooter"/>
-    <property name="surefire.real.class.path" value="/Users/lekegames/Desktop/teamsoAutomation/target/surefire/surefirebooter-20250901173004544_3.jar"/>
+    <property name="surefire.real.class.path" value="/Users/lekegames/Desktop/teamsoAutomation/target/surefire/surefirebooter-20250906155913386_3.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.runtime.version" value="23.0.2+7-58"/>
@@ -59,93 +59,244 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="67.0"/>
   </properties>
-  <testcase name="runScenario[&quot;Login to ATS Dashboard&quot;, &quot;ATS Authentication&quot;](1)" classname="runner.TestRunner" time="22.685">
+  <testcase name="runScenario[&quot;Login to ATS Dashboard&quot;, &quot;ATS Authentication&quot;](1)" classname="runner.ParallelTestRunner" time="0.048">
     <system-out><![CDATA[
 @ATS @settings @authentication @smoke @critical
+Scenario: Login to ATS Dashboard                                                                                                              # src/test/java/features/ATS/07_Settings/01_Authentication.feature:10
 
 @ATS @settings @authentication @smoke @critical
-Scenario Outline: Login to ATS Dashboard                                                                                                    &amp#27;[90m# src/test/java/features/ATS/07_Settings/01_Authentication.feature:17&amp#27;[0m
-Scenario Outline: Login to ATS Dashboard                                                                                                    # src/test/java/features/ATS/07_Settings/01_Authentication.feature:17
-ℹ️ INFO: Driver reset for new test
-ℹ️ INFO: Driver reset for new test
-ℹ️ INFO: New driver created for login
-ℹ️ INFO: New driver created for login
-✅ SUCCESS: Successfully navigated to: https://teamso.com/dashboard/account/login
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check completed
-✅ SUCCESS: Successfully navigated to: https://teamso.com/dashboard/account/login
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check completed
-✅ SUCCESS: Email entered successfully: kadir.mogul@teamso.com
-✅ SUCCESS: Login button clicked successfully
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check after login completed
-✅ SUCCESS: Email entered successfully: kadir.mogul@teamso.com
-✅ SUCCESS: Login button clicked successfully
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check after login completed
-✅ SUCCESS: Account search completed: prodkadir
-✅ SUCCESS: Account selected at index: 0
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check after account selection completed
-✅ SUCCESS: Password entered successfully
-✅ SUCCESS: Account search completed: prodkadir
-✅ SUCCESS: Account selected at index: 0
-✅ SUCCESS: Final login button clicked successfully
-✅ SUCCESS: Page loaded completely
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check after final login completed
-ℹ️ INFO: Page load check after account selection completed
-✅ SUCCESS: Password entered successfully
-✅ SUCCESS: Final login button clicked successfully
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check after final login completed
-✅ SUCCESS: Login process completed successfully
-✅ SUCCESS: Login process completed successfully
-✅ SUCCESS: Login verification successful - Redirected to dashboard
-  &amp#27;[32mGiven &amp#27;[0m&amp#27;[32mperform login with &amp#27;[0m&amp#27;[32m&amp#27;[1m"https://teamso.com/dashboard/account/login"&amp#27;[0m&amp#27;[32m and &amp#27;[0m&amp#27;[32m&amp#27;[1m"kadir.mogul@teamso.com"&amp#27;[0m&amp#27;[32m and &amp#27;[0m&amp#27;[32m&amp#27;[1m"prodkadir"&amp#27;[0m&amp#27;[32m and &amp#27;[0m&amp#27;[32m&amp#27;[1m"0"&amp#27;[0m&amp#27;[32m and &amp#27;[0m&amp#27;[32m&amp#27;[1m"Akm@2026"&amp#27;[0m &amp#27;[90m# stepDefinitions.AuthenticationStepDefinitions.perform_login_with_parameters(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)&amp#27;[0m
-✅ SUCCESS: Login verification successful
-  &amp#27;[32mThen &amp#27;[0m&amp#27;[32mverify login successful&amp#27;[0m                                                                                                              &amp#27;[90m# stepDefinitions.AuthenticationStepDefinitions.verify_login_successful()&amp#27;[0m
-ℹ️ INFO: Starting logout process...
-ℹ️ INFO: Using existing active driver
-✅ SUCCESS: Dropdown toggle button clicked successfully
-✅ SUCCESS: Login verification successful - Redirected to dashboard
-  Given perform login with "https://teamso.com/dashboard/account/login" and "kadir.mogul@teamso.com" and "prodkadir" and "0" and "Akm@2026" # stepDefinitions.AuthenticationStepDefinitions.perform_login_with_parameters(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
-✅ SUCCESS: Login verification successful
-  Then verify login successful                                                                                                              # stepDefinitions.AuthenticationStepDefinitions.verify_login_successful()
-ℹ️ INFO: Starting logout process...
-ℹ️ INFO: Using existing active driver
-✅ SUCCESS: Dropdown toggle button clicked successfully
-✅ SUCCESS: Logout link clicked successfully at index 3
-✅ SUCCESS: Logout process completed successfully
-✅ SUCCESS: Logout step completed successfully
-  &amp#27;[32mAnd &amp#27;[0m&amp#27;[32mperform logout from system&amp#27;[0m                                                                                                            &amp#27;[90m# stepDefinitions.AuthenticationStepDefinitions.perform_logout_from_system()&amp#27;[0m
-✅ SUCCESS: Logout link clicked successfully at index 3
-✅ SUCCESS: Logout process completed successfully
-✅ SUCCESS: Logout step completed successfully
-  And perform logout from system                                                                                                            # stepDefinitions.AuthenticationStepDefinitions.perform_logout_from_system()
-✅ SUCCESS: Driver closed and reference cleared
+Scenario: Login to ATS Dashboard                                                                                                              # src/test/java/features/ATS/07_Settings/01_Authentication.feature:10
+  Given Login to system with "https://teamso.com/dashboard/account/login" and "kadir.mogul@teamso.com" and "prodkadir" and "0" and "Akm@2026" # stepDefinitions.AuthenticationStepDefinitions.login_to_system_with_parameters(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+  Then verify login successful                                                                                                                # stepDefinitions.AuthenticationStepDefinitions.verify_login_successful()
+  And Select menu "Aday Takip Sistemi" and sub-menu "6"                                                                                       # stepDefinitions.AuthenticationStepDefinitions.select_menu_and_submenu(java.lang.String,java.lang.String)
+  And verify page opened successfully                                                                                                         # stepDefinitions.AuthenticationStepDefinitions.verify_page_opened_successfully()
+  And find parameter name at index "0"                                                                                                        # stepDefinitions.AuthenticationStepDefinitions.find_parameter_name_at_index(java.lang.String)
+  And find record number at index "0"                                                                                                         # stepDefinitions.AuthenticationStepDefinitions.find_record_number_at_index(java.lang.String)
+  And find option id with text "Detay"                                                                                                        # stepDefinitions.AuthenticationStepDefinitions.find_option_id_with_text(java.lang.String)
+ℹ️ INFO: Element references cleared for fresh test
+ℹ️ INFO: Driver, variables and element references reset for new test
+ℹ️ INFO: Starting login to system with parameters...
 ]]></system-out>
     <system-err><![CDATA[SLF4J(W): No SLF4J providers were found.
 SLF4J(W): Defaulting to no-operation (NOP) logger implementation
 SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
-StSarting ChromeDtrivera 139r.0.72t58i.154n g(9e 0d6Cb2b47ffb1700h7b71r3429oc9a3m02f9ee43D8r4iv7er 1f3-r9e.fs/b0ran.ch-he7ad2s/75258@8{.#1524 9(26}) on9 pe0dor6t b24b47f4fb16704
-O0nly local0 conne7ctbi7o13429c9a30ns 2afre9 ea43847f-llowed.
-Pleaserefs/branch-h eadss/725e8@{#2e92 6https}://ch)rome dorivenr.chr omiump.orgo/secrurtity -con3side0rati1ons1 for
- suggestions Oon nkleye plioncga lC hcroonmnections aere aDllorwedi.ver safe.
+]]></system-err>
+  </testcase>
+  <testcase name="runScenario[&quot;Login to ATS Dashboard&quot;, &quot;ATS Authentication&quot;](1)" classname="runner.TestRunner" time="32.169">
+    <failure message="The following asserts failed:&#10;	No option found with text containing: Detay" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: 
+The following asserts failed:
+	No option found with text containing: Detay
+	at org.testng.asserts.SoftAssert.assertAll(SoftAssert.java:46)
+	at org.testng.asserts.SoftAssert.assertAll(SoftAssert.java:30)
+	at stepDefinitions.AuthenticationStepDefinitions.tearDown(AuthenticationStepDefinitions.java:458)
+]]></failure>
+    <system-out><![CDATA[ℹ️ INFO: New driver created for login
+✅ SUCCESS: Successfully navigated to: https://teamso.com/dashboard/account/login
+✅ SUCCESS: Page loaded completely
+ℹ️ INFO: Page load check completed
+✅ SUCCESS: Element found: By.id: emailInputOnLoginPage
+✅ SUCCESS: Text entered: kadir.mogul@teamso.com
+✅ SUCCESS: Element found: By.id: login-button
+✅ SUCCESS: Element clicked: By.id: login-button
+✅ SUCCESS: Page loaded completely
+ℹ️ INFO: Page load check after login completed
+✅ SUCCESS: Element found: By.cssSelector: input[placeholder='Hesap ara...']
+✅ SUCCESS: Text entered: prodkadir
+✅ SUCCESS: Found 2 elements: By.cssSelector: button[id='accountSelectButtonOnLoginPage']
+✅ SUCCESS: Account selected at index: 0
+✅ SUCCESS: Page loaded completely
+ℹ️ INFO: Page load check after account selection completed
+✅ SUCCESS: Element found: By.id: passwordInputOnLoginPage
+✅ SUCCESS: Text entered: Akm@2026
+✅ SUCCESS: Element found: By.id: loginButtonInPasswordCheckInLoginPage
+✅ SUCCESS: Element clicked: By.id: loginButtonInPasswordCheckInLoginPage
+✅ SUCCESS: Page loaded completely
+ℹ️ INFO: Page load check after final login completed
+✅ SUCCESS: Login process completed successfully
+✅ SUCCESS: Login verification successful - Redirected to dashboard
+✅ SUCCESS: Login to system completed successfully
+✅ SUCCESS: Login to system step completed successfully
+  Given Login to system with "https://teamso.com/dashboard/account/login" and "kadir.mogul@teamso.com" and "prodkadir" and "0" and "Akm@2026" # stepDefinitions.AuthenticationStepDefinitions.login_to_system_with_parameters(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+✅ SUCCESS: Login verification successful
+  Then verify login successful                                                                                                                # stepDefinitions.AuthenticationStepDefinitions.verify_login_successful()
+ℹ️ INFO: Starting menu and sub-menu selection...
+ℹ️ INFO: Selecting menu: Aday Takip Sistemi
+ℹ️ INFO: Using existing active driver
+ℹ️ INFO: Found 129 menu items
+ℹ️ INFO: Found menu: Aday Takip Sistemi in text: 'Aday Takip Sistemi'
+ℹ️ INFO: Menu found, stopping search
+ℹ️ INFO: Clicking on menu: Aday Takip Sistemi
+✅ SUCCESS: Normal click successful for menu: Aday Takip Sistemi
+ℹ️ INFO: Last selected menu saved: Aday Takip Sistemi
+ℹ️ INFO: Waiting for menu to expand...
+ℹ️ INFO: Menu expanded successfully
+ℹ️ INFO: Waiting for menu to expand and sub-menu elements to appear...
+ℹ️ INFO: Element became visible: By.cssSelector: ul.sub-menu.mm-collapse.mm-show
+ℹ️ INFO: Sub-menu container is visible
+ℹ️ INFO: Sub-menu elements found without scrolling: 7
+ℹ️ INFO: Selecting module: Aday Takip Sistemi with sub-menu index: 6
+ℹ️ INFO: Using existing active driver
+ℹ️ INFO: Module 'Aday Takip Sistemi' should already be selected
+ℹ️ INFO: Sub-menu expanded successfully
+ℹ️ INFO: Resetting menu position to top for clean start
+ℹ️ INFO: === DEBUG: Checking if target element exists before scrolling ===
+ℹ️ INFO: === MODULE-SPECIFIC SUB-MENU SEARCH ===
+ℹ️ INFO: Looking for sub-menus of module: Aday Takip Sistemi
+ℹ️ INFO: === SEARCHING FOR SELECTED MODULE ===
+ℹ️ INFO: Found 129 total menu items
+ℹ️ INFO: Found selected module (contains match): Aday Takip Sistemi in text: 'Aday Takip Sistemi
+Sorumluluk Yönetme
+Onay Süreci
+İșe Alım Talepleri
+İș İlanları
+CV Havuzu
+Raporlar
+Ayarlar'
+ℹ️ INFO: Module-specific XPath found 9 sub-menu elements for: Aday Takip Sistemi
+ℹ️ INFO: Found 9 sub-menu items initially
+ℹ️ INFO: === DETAILED ELEMENT DEBUG ===
+ℹ️ INFO: Element 0 - Tag: li, Class: '', Text: 'Sorumluluk Yönetme', Displayed: true, Enabled: true
+ℹ️ INFO: Element 1 - Tag: li, Class: '', Text: 'Onay Süreci', Displayed: true, Enabled: true
+ℹ️ INFO: Element 2 - Tag: li, Class: '', Text: 'İșe Alım Talepleri', Displayed: true, Enabled: true
+ℹ️ INFO: Element 3 - Tag: li, Class: '', Text: 'İș İlanları', Displayed: true, Enabled: true
+ℹ️ INFO: Element 4 - Tag: li, Class: '', Text: 'CV Havuzu', Displayed: true, Enabled: true
+ℹ️ INFO: Element 5 - Tag: li, Class: '', Text: '', Displayed: false, Enabled: true
+ℹ️ INFO: Element 6 - Tag: li, Class: '', Text: '', Displayed: false, Enabled: true
+ℹ️ INFO: Element 7 - Tag: li, Class: '', Text: 'Raporlar', Displayed: true, Enabled: true
+ℹ️ INFO: Element 8 - Tag: li, Class: '', Text: 'Ayarlar', Displayed: true, Enabled: true
+ℹ️ INFO: === FILTERING EMPTY ELEMENTS ===
+ℹ️ INFO: Filtered 9 elements to 7 valid elements
+ℹ️ INFO: === FILTERED ELEMENTS DEBUG ===
+ℹ️ INFO: Valid Element 0 - Text: 'Sorumluluk Yönetme'
+ℹ️ INFO: Valid Element 1 - Text: 'Onay Süreci'
+ℹ️ INFO: Valid Element 2 - Text: 'İșe Alım Talepleri'
+ℹ️ INFO: Valid Element 3 - Text: 'İș İlanları'
+ℹ️ INFO: Valid Element 4 - Text: 'CV Havuzu'
+ℹ️ INFO: Valid Element 5 - Text: 'Raporlar'
+ℹ️ INFO: Valid Element 6 - Text: 'Ayarlar'
+ℹ️ INFO: Target sub-menu found and visible at index 6: Ayarlar
+ℹ️ INFO: Available sub-menus:
+ℹ️ INFO: Index 0: Sorumluluk Yönetme
+ℹ️ INFO: Index 1: Onay Süreci
+ℹ️ INFO: Index 2: İșe Alım Talepleri
+ℹ️ INFO: Index 3: İș İlanları
+ℹ️ INFO: Index 4: CV Havuzu
+ℹ️ INFO: Index 5: Raporlar
+ℹ️ INFO: Index 6: Ayarlar
+ℹ️ INFO: Clicking on sub-menu item: Ayarlar
+ℹ️ INFO: Last selected sub-menu saved: Ayarlar
+ℹ️ INFO: Overlay elements removed
+ℹ️ INFO: Element became clickable: li
+ℹ️ INFO: === DEBUG: Element before click ===
+ℹ️ INFO: Element - Displayed: true, Enabled: true, Text: 'Ayarlar'
+ℹ️ INFO: Element - Tag: li, Class: ''
+ℹ️ INFO: Element - Location: (0, 694)
+ℹ️ INFO: Element - Size: (250, 34)
+ℹ️ INFO: === DEBUG: Page before click ===
+ℹ️ INFO: Page - URL: https://teamso.com/dashboard
+ℹ️ INFO: Page - Title: Anasayfa - Teamso
+✅ SUCCESS: Normal click successful for sub-menu: Ayarlar
+ℹ️ INFO: === DEBUG: After click ===
+ℹ️ INFO: Click successful: true
+ℹ️ INFO: Waiting for click effect...
+ℹ️ INFO: === DEBUG: Page after click ===
+ℹ️ INFO: Page - URL: https://teamso.com/dashboard/ats/settings
+ℹ️ INFO: Page - Title: Ayarlar - Teamso
+ℹ️ INFO: URL did not change within 5 seconds, continuing...
+ℹ️ INFO: Current URL after click: https://teamso.com/dashboard/ats/settings
+ℹ️ INFO: Current URL after click: https://teamso.com/dashboard/ats/settings
+✅ SUCCESS: Page loaded completely
+ℹ️ INFO: Page load completed after sub-menu selection
+ℹ️ INFO: Final URL after page load: https://teamso.com/dashboard/ats/settings
+✅ SUCCESS: Menu and sub-menu selection completed successfully
+✅ SUCCESS: Menu 'Aday Takip Sistemi' and sub-menu '6' selection step completed successfully
+  And Select menu "Aday Takip Sistemi" and sub-menu "6"                                                                                       # stepDefinitions.AuthenticationStepDefinitions.select_menu_and_submenu(java.lang.String,java.lang.String)
+ℹ️ INFO: Verifying page opened...
+ℹ️ INFO: Using existing active driver
+ℹ️ INFO: Current URL after click: https://teamso.com/dashboard/ats/settings
+✅ SUCCESS: Page opened successfully - URL: https://teamso.com/dashboard/ats/settings
+ℹ️ INFO: Page title: Ayarlar - Teamso
+✅ SUCCESS: Page verification step completed successfully
+  And verify page opened successfully                                                                                                         # stepDefinitions.AuthenticationStepDefinitions.verify_page_opened_successfully()
+ℹ️ INFO: Finding parameter name at index: 0
+✅ SUCCESS: Parameter name found at index 0: İş İlanı Şablonları
+İş ilanı oluştururken kullanabileceğiniz şablonları oluşturun
+Ekle
+başlık
+ioss
+QA-AI12
+kayıt başlığo
+11
+kayıt başlığı max kayıt başlığı max kayıt başlığı max kayıt başlığı mkayıt başlığı max ax kayıt başlığı max kayıt başlığı max kayıt başlığı max kayıt başlığı max kayıt başlığı max kayıt başlığı max kayıt başlığı max kayıt başlığı max kayıt başlığı max
+111
+Şablon 002 ENG
+Şablon 001 -TR
+✅ SUCCESS: Parameter name clicked successfully
+ℹ️ INFO: Selected parameter saved for filtering: İş İlanı Şablonları
+İş ilanı oluştururken kullanabileceğiniz şablonları oluşturun
+Ekle
+başlık
+ioss
+QA-AI12
+kayıt başlığo
+11
+kayıt başlığı max kayıt başlığı max kayıt başlığı max kayıt başlığı mkayıt başlığı max ax kayıt başlığı max kayıt başlığı max kayıt başlığı max kayıt başlığı max kayıt başlığı max kayıt başlığı max kayıt başlığı max kayıt başlığı max kayıt başlığı max
+111
+Şablon 002 ENG
+Şablon 001 -TR
+  And find parameter name at index "0"                                                                                                        # stepDefinitions.AuthenticationStepDefinitions.find_parameter_name_at_index(java.lang.String)
+ℹ️ INFO: Finding record number at index: 0
+ℹ️ INFO: Filtering records by selected parameter...
+ℹ️ INFO: Found 9 records under selected parameter
+✅ SUCCESS: Record number found at index 0: başlık
+ℹ️ INFO: Overlay elements removed for record click
+✅ SUCCESS: Normal click successful for record: başlık
+✅ SUCCESS: Record number clicked successfully
+ℹ️ INFO: Selected record saved for filtering: başlık
+  And find record number at index "0"                                                                                                         # stepDefinitions.AuthenticationStepDefinitions.find_record_number_at_index(java.lang.String)
+ℹ️ INFO: Finding option id with text: Detay
+ℹ️ INFO: Filtering options by selected record...
+ℹ️ INFO: Found 1 options in selected record
+ℹ️ INFO: === OPTION ELEMENTS DEBUG ===
+ℹ️ INFO: Found 1 option elements
+ℹ️ INFO: Option Element 0 - Tag: div, Class: 'col-lg-1 d-flex justify-content-end align-items-center', Text: '', Displayed: true, Enabled: true
+ℹ️ INFO: === END OPTION ELEMENTS DEBUG ===
+ℹ️ INFO: Checking element - Text: '', Title: ''
+  And find option id with text "Detay"                                                                                                        # stepDefinitions.AuthenticationStepDefinitions.find_option_id_with_text(java.lang.String)
+✅ SUCCESS: Driver closed and reference cleared
+      java.lang.AssertionError: The following asserts failed:
+	No option found with text containing: Detay
+	at org.testng.asserts.SoftAssert.assertAll(SoftAssert.java:46)
+	at org.testng.asserts.SoftAssert.assertAll(SoftAssert.java:30)
+	at stepDefinitions.AuthenticationStepDefinitions.tearDown(AuthenticationStepDefinitions.java:458)
 
+]]></system-out>
+    <system-err><![CDATA[┌───────────────────────────────────────────────────────────────────────────────────┐
+│ Share your Cucumber Report with your team at https://reports.cucumber.io          │
+│ Activate publishing with one of the following:                                    │
+│                                                                                   │
+│ src/test/resources/cucumber.properties:          cucumber.publish.enabled=true    │
+│ src/test/resources/junit-platform.properties:    cucumber.publish.enabled=true    │
+│ Environment variable:                            CUCUMBER_PUBLISH_ENABLED=true    │
+│ JUnit:                                           @CucumberOptions(publish = true) │
+│                                                                                   │
+│ More information at https://cucumber.io/docs/cucumber/environment-variables/      │
+│                                                                                   │
+│ Disable this message with one of the following:                                   │
+│                                                                                   │
+│ src/test/resources/cucumber.properties:          cucumber.publish.quiet=true      │
+│ src/test/resources/junit-platform.properties:    cucumber.publish.quiet=true      │
+└───────────────────────────────────────────────────────────────────────────────────┘
+Starting ChromeDriver 139.0.7258.154 (9e0d6b2b47ffb17007b713429c9a302f9e43847f-refs/branch-heads/7258@{#2926}) on port 43048
+Only local connections are allowed.
 Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
-ChromeDriver CwharomeDsr isvtearr tweas sdt asrutcecd seussfculcleys sofnu lployr t 446o0n4 .p
-ort 3011.
-Sep 01, 2025 5:30:10 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
+ChromeDriver was started successfully on port 43048.
+Sep 06, 2025 3:59:17 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
 WARNING: Unable to find CDP implementation matching 139
-Sep 01, 2025 5:30:10 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
-WARNING: Unable to find CDP implementation matching 139
-Sep 01, 2025 5:30:10 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$3
+Sep 06, 2025 3:59:17 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$3
 WARNING: Unable to find version of CDP to use for . You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.8.1` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
-Sep 01, 2025 5:30:10 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$3
-WARNING: Unable to find version of CDP to use for . You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.8.1` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
-Sep 01, 2025 5:30:27 PM org.openqa.selenium.remote.http.WebSocket$Listener onError
+❌ ERROR: No option found with text containing: Detay - Text not found
+Sep 06, 2025 3:59:45 PM org.openqa.selenium.remote.http.WebSocket$Listener onError
 WARNING: Connection reset
 java.net.SocketException: Connection reset
 	at java.base/sun.nio.ch.SocketChannelImpl.throwConnectionReset(SocketChannelImpl.java:403)
@@ -164,116 +315,6 @@ java.net.SocketException: Connection reset
 	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
 	at java.base/java.lang.Thread.run(Thread.java:1575)
 
-]]></system-err>
-  </testcase>
-  <testcase name="runScenario[&quot;Login to ATS Dashboard&quot;, &quot;ATS Authentication&quot;](2)" classname="runner.TestRunner" time="20.099">
-    <system-out><![CDATA[
-@ATS @settings @authentication @smoke @critical
-Scenario Outline: Login to ATS Dashboard                                                                                                    # src/test/java/features/ATS/07_Settings/01_Authentication.feature:18
-ℹ️ INFO: Driver reset for new test
-ℹ️ INFO: New driver created for login
-ℹ️ INFO: New driver created for login
-✅ SUCCESS: Successfully navigated to: https://teamso.com/dashboard/account/login
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check completed
-✅ SUCCESS: Email entered successfully: kadir.mogul@teamso.com
-✅ SUCCESS: Login button clicked successfully
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check after login completed
-✅ SUCCESS: Successfully navigated to: https://teamso.com/dashboard/account/login
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check completed
-✅ SUCCESS: Email entered successfully: kadir.mogul@teamso.com
-✅ SUCCESS: Login button clicked successfully
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check after login completed
-✅ SUCCESS: Account search completed: prodkadir
-✅ SUCCESS: Account selected at index: 1
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check after account selection completed
-✅ SUCCESS: Account search completed: prodkadir
-✅ SUCCESS: Password entered successfully
-✅ SUCCESS: Account selected at index: 1
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check after account selection completed
-✅ SUCCESS: Final login button clicked successfully
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check after final login completed
-✅ SUCCESS: Password entered successfully
-✅ SUCCESS: Final login button clicked successfully
-✅ SUCCESS: Page loaded completely
-ℹ️ INFO: Page load check after final login completed
-✅ SUCCESS: Login process completed successfully
-✅ SUCCESS: Login verification successful - Redirected to dashboard
-  &amp#27;[32mGiven &amp#27;[0m&amp#27;[32mperform login with &amp#27;[0m&amp#27;[32m&amp#27;[1m"https://teamso.com/dashboard/account/login"&amp#27;[0m&amp#27;[32m and &amp#27;[0m&amp#27;[32m&amp#27;[1m"kadir.mogul@teamso.com"&amp#27;[0m&amp#27;[32m and &amp#27;[0m&amp#27;[32m&amp#27;[1m"prodkadir"&amp#27;[0m&amp#27;[32m and &amp#27;[0m&amp#27;[32m&amp#27;[1m"1"&amp#27;[0m&amp#27;[32m and &amp#27;[0m&amp#27;[32m&amp#27;[1m"Akm@2026"&amp#27;[0m &amp#27;[90m# stepDefinitions.AuthenticationStepDefinitions.perform_login_with_parameters(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)&amp#27;[0m
-✅ SUCCESS: Login verification successful
-  &amp#27;[32mThen &amp#27;[0m&amp#27;[32mverify login successful&amp#27;[0m                                                                                                              &amp#27;[90m# stepDefinitions.AuthenticationStepDefinitions.verify_login_successful()&amp#27;[0m
-ℹ️ INFO: Starting logout process...
-ℹ️ INFO: Using existing active driver
-✅ SUCCESS: Dropdown toggle button clicked successfully
-✅ SUCCESS: Login process completed successfully
-✅ SUCCESS: Login verification successful - Redirected to dashboard
-  Given perform login with "https://teamso.com/dashboard/account/login" and "kadir.mogul@teamso.com" and "prodkadir" and "1" and "Akm@2026" # stepDefinitions.AuthenticationStepDefinitions.perform_login_with_parameters(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
-✅ SUCCESS: Login verification successful
-  Then verify login successful                                                                                                              # stepDefinitions.AuthenticationStepDefinitions.verify_login_successful()
-ℹ️ INFO: Starting logout process...
-ℹ️ INFO: Using existing active driver
-✅ SUCCESS: Dropdown toggle button clicked successfully
-✅ SUCCESS: Logout link clicked successfully at index 3
-✅ SUCCESS: Logout process completed successfully
-✅ SUCCESS: Logout step completed successfully
-  &amp#27;[32mAnd &amp#27;[0m&amp#27;[32mperform logout from system&amp#27;[0m                                                                                                            &amp#27;[90m# stepDefinitions.AuthenticationStepDefinitions.perform_logout_from_system()&amp#27;[0m
-✅ SUCCESS: Logout link clicked successfully at index 3
-✅ SUCCESS: Driver closed and reference cleared
-]]></system-out>
-    <system-err><![CDATA[Starting ChromeDriver 139.0.7258.154 (9e0d6b2b47ffb17007b713429c9a302f9e43847f-refs/branch-heads/7258@{#2926}) on port 39643
-Only local connections are allowed.
-Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
-ChromeDriver was started successfully on port 39643.
-Starting ChromeDriver 139.0.7258.154 (9e0d6b2b47ffb17007b713429c9a302f9e43847f-refs/branch-heads/7258@{#2926}) on port 30185
-Only local connections are allowed.
-Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
-ChromeDriver was started successfully on port 30185.
-Sep 01, 2025 5:30:32 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
-WARNING: Unable to find CDP implementation matching 139
-Sep 01, 2025 5:30:32 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$3
-WARNING: Unable to find version of CDP to use for . You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.8.1` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
-Sep 01, 2025 5:30:32 PM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
-WARNING: Unable to find CDP implementation matching 139
-Sep 01, 2025 5:30:32 PM org.openqa.selenium.chromium.ChromiumDriver lambda$new$3
-WARNING: Unable to find version of CDP to use for . You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.8.1` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
-]]></system-err>
-  </testcase>
-  <testcase name="runScenario[&quot;Login to ATS Dashboard&quot;, &quot;ATS Authentication&quot;](1)" classname="runner.ParallelTestRunner" time="0.037">
-    <system-out><![CDATA[
-@ATS @settings @authentication @smoke @critical
-Scenario Outline: Login to ATS Dashboard                                                                                                    &amp#27;[90m# src/test/java/features/ATS/07_Settings/01_Authentication.feature:18&amp#27;[0m
-ℹ️ INFO: Driver reset for new test
-✅ SUCCESS: Driver closed and reference cleared
-]]></system-out>
-  </testcase>
-  <testcase name="runScenario[&quot;Login to ATS Dashboard&quot;, &quot;ATS Authentication&quot;](2)" classname="runner.ParallelTestRunner" time="20.299">
-    <system-out><![CDATA[✅ SUCCESS: Logout process completed successfully
-✅ SUCCESS: Logout step completed successfully
-  And perform logout from system                                                                                                            # stepDefinitions.AuthenticationStepDefinitions.perform_logout_from_system()
-✅ SUCCESS: Driver closed and reference cleared
-]]></system-out>
-    <system-err><![CDATA[&amp#27;[32m&amp#27;[1m┌───────────────────────────────────────────────────────────────────────────────────┐&amp#27;[0m
-&amp#27;[32m&amp#27;[1m│&amp#27;[0m Share your Cucumber Report with your team at &amp#27;[36m&amp#27;[1m&amp#27;[4mhttps://reports.cucumber.io&amp#27;[0m          &amp#27;[32m&amp#27;[1m│&amp#27;[0m
-&amp#27;[32m&amp#27;[1m│&amp#27;[0m Activate publishing with one of the following:                                    &amp#27;[32m&amp#27;[1m│&amp#27;[0m
-&amp#27;[32m&amp#27;[1m│&amp#27;[0m                                                                                   &amp#27;[32m&amp#27;[1m│&amp#27;[0m
-&amp#27;[32m&amp#27;[1m│&amp#27;[0m src/test/resources/cucumber.properties:          &amp#27;[36mcucumber.publish.enabled&amp#27;[0m=&amp#27;[36mtrue&amp#27;[0m    &amp#27;[32m&amp#27;[1m│&amp#27;[0m
-&amp#27;[32m&amp#27;[1m│&amp#27;[0m src/test/resources/junit-platform.properties:    &amp#27;[36mcucumber.publish.enabled&amp#27;[0m=&amp#27;[36mtrue&amp#27;[0m    &amp#27;[32m&amp#27;[1m│&amp#27;[0m
-&amp#27;[32m&amp#27;[1m│&amp#27;[0m Environment variable:                            &amp#27;[36mCUCUMBER_PUBLISH_ENABLED&amp#27;[0m=&amp#27;[36mtrue&amp#27;[0m    &amp#27;[32m&amp#27;[1m│&amp#27;[0m
-&amp#27;[32m&amp#27;[1m│&amp#27;[0m JUnit:                                           &amp#27;[36m@CucumberOptions&amp#27;[0m(publish = &amp#27;[36mtrue&amp#27;[0m) &amp#27;[32m&amp#27;[1m│&amp#27;[0m
-&amp#27;[32m&amp#27;[1m│&amp#27;[0m                                                                                   &amp#27;[32m&amp#27;[1m│&amp#27;[0m
-&amp#27;[32m&amp#27;[1m│&amp#27;[0m More information at &amp#27;[36mhttps://cucumber.io/docs/cucumber/environment-variables/&amp#27;[0m      &amp#27;[32m&amp#27;[1m│&amp#27;[0m
-&amp#27;[32m&amp#27;[1m│&amp#27;[0m                                                                                   &amp#27;[32m&amp#27;[1m│&amp#27;[0m
-&amp#27;[32m&amp#27;[1m│&amp#27;[0m Disable this message with one of the following:                                   &amp#27;[32m&amp#27;[1m│&amp#27;[0m
-&amp#27;[32m&amp#27;[1m│&amp#27;[0m                                                                                   &amp#27;[32m&amp#27;[1m│&amp#27;[0m
-&amp#27;[32m&amp#27;[1m│&amp#27;[0m src/test/resources/cucumber.properties:          &amp#27;[36mcucumber.publish.quiet&amp#27;[0m=&amp#27;[36mtrue&amp#27;[0m      &amp#27;[32m&amp#27;[1m│&amp#27;[0m
-&amp#27;[32m&amp#27;[1m│&amp#27;[0m src/test/resources/junit-platform.properties:    &amp#27;[36mcucumber.publish.quiet&amp#27;[0m=&amp#27;[36mtrue&amp#27;[0m      &amp#27;[32m&amp#27;[1m│&amp#27;[0m
-&amp#27;[32m&amp#27;[1m└───────────────────────────────────────────────────────────────────────────────────┘&amp#27;[0m
 ]]></system-err>
   </testcase>
 </testsuite>

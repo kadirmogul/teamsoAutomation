@@ -2,7 +2,6 @@ package utilities;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
@@ -20,20 +19,41 @@ public class TestUtils {
     
     // SAYFA TAM YÜKLENENE KADAR BEKLE (KONTROL İLE)
     public static void waitForPageToLoad(WebDriver driver, int timeoutSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
         try {
-            // JavaScript readyState kontrolü
-            wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete'"));
+            // Driver'ın aktif olduğunu kontrol et
+            if (driver == null) {
+                logWarning("Driver is null, skipping page load check");
+                return;
+            }
             
-            // jQuery yüklenmişse onu da kontrol et
-            wait.until(ExpectedConditions.jsReturnsValue("return typeof jQuery === 'undefined' || jQuery.active === 0"));
+            // Driver'ın hala aktif olduğunu kontrol et
+            try {
+                driver.getCurrentUrl();
+            } catch (Exception e) {
+                logWarning("Driver is no longer active, skipping page load check");
+                return;
+            }
             
-            // AJAX istekleri tamamlandı mı kontrol et
-            wait.until(ExpectedConditions.jsReturnsValue("return window.performance.getEntriesByType('navigation')[0].loadEventEnd > 0"));
-            
-            logSuccess("Page loaded completely");
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+            try {
+                // JavaScript readyState kontrolü
+                wait.until(ExpectedConditions.jsReturnsValue("return document.readyState === 'complete'"));
+                
+                // jQuery yüklenmişse onu da kontrol et
+                wait.until(ExpectedConditions.jsReturnsValue("return typeof jQuery === 'undefined' || jQuery.active === 0"));
+                
+                logSuccess("Page loaded completely");
+            } catch (Exception e) {
+                // AJAX istekleri tamamlandı mı kontrol et (daha esnek)
+                try {
+                    wait.until(ExpectedConditions.jsReturnsValue("return window.performance.getEntriesByType('navigation')[0].loadEventEnd > 0"));
+                    logSuccess("Page loaded completely (fallback check)");
+                } catch (Exception e2) {
+                    logWarning("Page load timeout, but continuing...");
+                }
+            }
         } catch (Exception e) {
-            logWarning("Page load timeout, but continuing...");
+            logWarning("Page load check failed, but continuing...");
         }
     }
     

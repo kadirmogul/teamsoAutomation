@@ -55,11 +55,11 @@ function toggleAllBoxes() {
 <body>
 <h2 align='center'>Surefire test</h2><table border='1' align="center">
 <tr>
-<td>Tests passed/Failed/Skipped:</td><td>4/0/0</td>
+<td>Tests passed/Failed/Skipped:</td><td>1/1/0</td>
 </tr><tr>
-<td>Started on:</td><td>Mon Sep 01 17:30:04 GMT+03:00 2025</td>
+<td>Started on:</td><td>Sat Sep 06 15:59:13 GMT+03:00 2025</td>
 </tr>
-<tr><td>Total time:</td><td>43 seconds (43287 ms)</td>
+<tr><td>Total time:</td><td>32 seconds (32389 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -67,6 +67,29 @@ function toggleAllBoxes() {
 </tr>
 </table><p/>
 <small><i>(Hover the method name to see the test class name)</i></small><p/>
+<table width='100%' border='1' class='invocation-failed'>
+<tr><td colspan='4' align='center'><b>FAILED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td><b>Attribute(s)</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='runner.TestRunner.runScenario()'><b>runScenario</b><br>Test class: runner.TestRunner<br>Test method: Runs Cucumber Scenarios<br>Parameters: "Login to ATS Dashboard", "ATS Authentication"</td>
+<td><div><pre>java.lang.AssertionError: The following asserts failed:
+	No option found with text containing: Detay
+	at stepDefinitions.AuthenticationStepDefinitions.tearDown(AuthenticationStepDefinitions.java:458)
+... Removed 2 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1851735749", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1851735749'><pre>java.lang.AssertionError: The following asserts failed:
+	No option found with text containing: Detay
+	at org.testng.asserts.SoftAssert.assertAll(SoftAssert.java:46)
+	at org.testng.asserts.SoftAssert.assertAll(SoftAssert.java:30)
+	at stepDefinitions.AuthenticationStepDefinitions.tearDown(AuthenticationStepDefinitions.java:458)
+</pre></div></td>
+<td>32</td>
+<td>runner.TestRunner@34b7ac2f</td></tr>
+</table><p>
 <table width='100%' border='1' class='invocation-passed'>
 <tr><td colspan='4' align='center'><b>PASSED TESTS</b></td></tr>
 <tr><td><b>Test method</b></td>
@@ -76,25 +99,10 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='runner.TestRunner.runScenario()'><b>runScenario</b><br>Test class: runner.TestRunner<br>Test method: Runs Cucumber Scenarios<br>Parameters: "Login to ATS Dashboard", "ATS Authentication"</td>
-<td></td>
-<td>22</td>
-<td>runner.TestRunner@34b7ac2f</td></tr>
-<tr>
 <td title='runner.ParallelTestRunner.runScenario()'><b>runScenario</b><br>Test class: runner.ParallelTestRunner<br>Test method: Runs Cucumber Scenarios<br>Parameters: "Login to ATS Dashboard", "ATS Authentication"</td>
 <td></td>
-<td>22</td>
+<td>0</td>
 <td>runner.ParallelTestRunner@a9cd3b1</td></tr>
-<tr>
-<td title='runner.ParallelTestRunner.runScenario()'><b>runScenario</b><br>Test class: runner.ParallelTestRunner<br>Test method: Runs Cucumber Scenarios<br>Parameters: "Login to ATS Dashboard", "ATS Authentication"</td>
-<td></td>
-<td>20</td>
-<td>runner.ParallelTestRunner@a9cd3b1</td></tr>
-<tr>
-<td title='runner.TestRunner.runScenario()'><b>runScenario</b><br>Test class: runner.TestRunner<br>Test method: Runs Cucumber Scenarios<br>Parameters: "Login to ATS Dashboard", "ATS Authentication"</td>
-<td></td>
-<td>20</td>
-<td>runner.TestRunner@34b7ac2f</td></tr>
 </table><p>
 </body>
 </html>
